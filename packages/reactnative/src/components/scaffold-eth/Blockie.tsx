@@ -5,8 +5,9 @@ import { WebView } from 'react-native-webview';
 type Props = {
   address: string;
   size: number;
+  bg?: string;
 };
-export const Blockie = ({ address, size }: Props) => {
+export const Blockie = ({ address, size, bg }: Props) => {
   const iconScale = 0.4 * size;
   const iconSize = 10;
   return (
@@ -20,7 +21,7 @@ export const Blockie = ({ address, size }: Props) => {
                     <!DOCTYPE html>
                         <head>
                         <style>
-                            body { background: #ffffff; margin: 0px;} img,canvas { display: inline-block; margin: 0px; border-radius: 100%}
+                            body { background: ${bg || '#ffffff'}; margin: 0px;} img,canvas { display: inline-block; margin: 0px; border-radius: 100%}
                         </style>
                         </head>
                         <body>

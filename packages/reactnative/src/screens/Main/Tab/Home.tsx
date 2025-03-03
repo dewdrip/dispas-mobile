@@ -10,6 +10,7 @@ import {
 import { Button, Card, Text } from 'react-native-paper';
 // @ts-ignore
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import Payment from '../../../components/Payment';
 import ProfilePlaceholder from '../../../components/ProfilePlaceholder';
 import RecipientInput from '../../../components/RecipientInput';
 import { Blockie } from '../../../components/scaffold-eth';
@@ -89,7 +90,11 @@ export default function Home() {
         </View>
 
         <View style={styles.receiverContainer}>
-          <ProfilePlaceholder />
+          {/* <ProfilePlaceholder /> */}
+
+          <View>
+            <Payment />
+          </View>
 
           <RecipientInput onSelect={console.log} />
 
