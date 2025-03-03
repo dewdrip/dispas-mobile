@@ -1,152 +1,107 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View
+} from 'react-native';
 import { Card, Text } from 'react-native-paper';
 // @ts-ignore
-import Ionicons from 'react-native-vector-icons/dist/Ionicons';
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import { Blockie } from '../../../components/scaffold-eth';
+import {
+  useAccount,
+  useBalance,
+  useNetwork
+} from '../../../hooks/scaffold-eth';
 import globalStyles from '../../../styles/globalStyles';
 import { COLORS } from '../../../utils/constants';
+import { parseBalance } from '../../../utils/scaffold-eth';
 import { FONT_SIZE, WINDOW_WIDTH } from '../../../utils/styles';
 
-type Props = {};
+export default function Home() {
+  const account = useAccount();
+  const network = useNetwork();
+  const { balance } = useBalance({
+    address: account.address
+  });
 
-function HighlightedText({ children }: { children: string }) {
+  const [totalNativeValue, setTotalNativeValue] = useState('');
+  const [totalDollarValue, setTotalDollarValue] = useState('');
+  const [isDollar, setIsDollar] = useState(false); // Toggle USD/LYX
+  const [isSending, setIsSending] = useState(false);
   return (
-    <View
-      style={{ backgroundColor: COLORS.primaryLight, paddingHorizontal: 4 }}
-    >
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: FONT_SIZE['md'],
-          ...globalStyles.text
-        }}
-      >
-        {children}
-      </Text>
+    <View style={styles.container}>
+      <Card style={styles.transferContainer}>
+        <Text style={{ textAlign: 'right', padding: 10 }}>
+          Balance:{' '}
+          {balance !== null
+            ? `${Number(parseBalance(balance)).toLocaleString('en-US')} ${network.currencySymbol}`
+            : null}
+        </Text>
+          <View style={styles.senderContainer}>
+            <Blockie address={account.address} size={3 * FONT_SIZE.xl} />
+
+            <View style={styles.inputContainer}>
+              {isDollar && totalNativeValue && (
+                <Text style={styles.inputCurrencySymbol}>$</Text>
+              )}
+              <TextInput
+                placeholder={`0`}
+                keyboardType="number-pad"
+                style={styles.input}
+                placeholderTextColor="#aaa"
+              />
+              {!isDollar && totalNativeValue && (
+                <Text style={styles.inputCurrencySymbol}>
+                  {network.currencySymbol}
+                </Text>
+              )}
+            </View>
+
+            <Text style={styles.currencyConversion}>
+              ~{!isDollar && '$'} 10 {isDollar && network.currencySymbol}
+            </Text>
+
+            <View style={styles.actionButtonContainer}>
+              <Pressable style={styles.actionButton}>
+                {!isDollar ? (
+                  <FontAwesome name="dollar" style={styles.dollarIcon} />
+                ) : (
+                  <Image
+                    source={require('../../../assets/images/eth-icon.png')}
+                    style={{
+                      width: FONT_SIZE.lg * 1.6,
+                      height: FONT_SIZE.lg * 1.6
+                    }}
+                  />
+                )}
+              </Pressable>
+
+              <Pressable style={[styles.actionButton, styles.shareButton]}>
+                <FontAwesome name="share-alt" style={styles.shareIcon} />
+              </Pressable>
+            </View>
+          </View>
+
+          <View style={styles.receiverContainer}>
+                
+          </View>
+      </Card>
     </View>
   );
 }
 
-export default function Home({}: Props) {
-  const navigation = useNavigation();
-
-  return (
-    <ScrollView
-      style={{ flex: 1, backgroundColor: 'white', paddingHorizontal: 10 }}
-    >
-      <View style={{ paddingVertical: 32, alignItems: 'center' }}>
-        <Text variant="headlineSmall" style={globalStyles.text}>
-          Welcome to
-        </Text>
-        <Text variant="displaySmall" style={globalStyles.textSemiBold}>
-          Scaffold-ETH
-        </Text>
-
-        <Text
-          style={{
-            marginTop: 16,
-            marginBottom: 4,
-            fontSize: FONT_SIZE['lg'],
-            ...globalStyles.text
-          }}
-        >
-          Get started by editing
-        </Text>
-        <HighlightedText>
-          packages/reactnative/src/screens/Main/Tab/Home.tsx
-        </HighlightedText>
-
-        <View
-          style={{
-            flexDirection: 'row',
-            marginTop: 16,
-            marginBottom: 4,
-            gap: 4,
-            maxWidth: '100%'
-          }}
-        >
-          <Text style={{ fontSize: FONT_SIZE['lg'], ...globalStyles.text }}>
-            Edit your smart contract
-          </Text>
-          <HighlightedText>YourContract.sol</HighlightedText>
-          <Text style={{ fontSize: FONT_SIZE['lg'], ...globalStyles.text }}>
-            in
-          </Text>
-        </View>
-        <HighlightedText>packages/hardhat/contracts</HighlightedText>
-      </View>
-
-      <View style={styles.featuresContainer}>
-        {/* Contract Debugger */}
-        <Card style={styles.feature}>
-          <Card.Content
-            style={{
-              alignItems: 'center',
-              gap: 10
-            }}
-          >
-            <Ionicons
-              name="bug-outline"
-              color={'grey'}
-              size={WINDOW_WIDTH * 0.09}
-            />
-
-            <Text style={styles.featureCaption}>
-              Tinker with your smart contracts using the
-              <Text
-                style={styles.featureLink}
-                onPress={() => navigation.navigate('DebugContracts')}
-              >
-                {' '}
-                DebugContracts{' '}
-              </Text>
-              tab
-            </Text>
-          </Card.Content>
-        </Card>
-
-        {/* Wallet */}
-        <Card style={styles.feature}>
-          <Card.Content
-            style={{
-              alignItems: 'center',
-              gap: 10
-            }}
-          >
-            <Ionicons
-              name="wallet-outline"
-              color={'grey'}
-              size={WINDOW_WIDTH * 0.09}
-            />
-
-            <Text style={styles.featureCaption}>
-              Manage your accounts, funds, and tokens in your
-              <Text
-                style={styles.featureLink}
-                onPress={() => navigation.navigate('Wallet')}
-              >
-                {' '}
-                Wallet
-              </Text>
-            </Text>
-          </Card.Content>
-        </Card>
-      </View>
-    </ScrollView>
-  );
-}
-
 const styles = StyleSheet.create({
-  featuresContainer: {
+  container: {
     flex: 1,
-    padding: 10,
-    justifyContent: 'center',
     alignItems: 'center',
-    gap: 20
+    justifyContent: 'center',
+    backgroundColor: 'white',
   },
-  feature: {
-    paddingVertical: 32,
+  transferContainer: {
     width: '90%',
     borderWidth: 1,
     borderColor: COLORS.gray,
@@ -154,15 +109,60 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     gap: 24
   },
-  featureCaption: {
-    textAlign: 'center',
-    width: WINDOW_WIDTH * 0.6,
-    fontSize: FONT_SIZE['lg'],
-    ...globalStyles.text
+  senderContainer: {
+    alignItems: 'center',
+    paddingVertical: 10
   },
-  featureLink: {
-    textDecorationLine: 'underline',
-    fontSize: FONT_SIZE['lg'],
-    ...globalStyles.textSemiBold
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  input: {
+    fontSize: FONT_SIZE.xl,
+    ...globalStyles.text,
+    maxWidth: '85%'
+  },
+  inputCurrencySymbol: {
+    marginBottom: 5,
+    fontSize: FONT_SIZE.lg
+  },
+  currencyConversion: {
+    fontSize: FONT_SIZE.sm,
+    fontStyle: 'italic',
+    color: '#777',
+    ...globalStyles.text,
+    marginTop: -10
+  },
+  actionButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 10
+  },
+  actionButton: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 100,
+    width: FONT_SIZE.lg * 2,
+    aspectRatio: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  dollarIcon: {
+    fontSize: FONT_SIZE.lg,
+    color: COLORS.primary
+  },
+  shareButton: {
+    backgroundColor: '#666'
+  },
+  shareIcon: {
+    fontSize: FONT_SIZE.lg,
+    color: 'white'
+  },
+  receiverContainer: {
+    backgroundColor: '#ccc',
+    height: 100,
+    borderBottomStartRadius: 24,
+    borderBottomEndRadius: 24
   }
 });
