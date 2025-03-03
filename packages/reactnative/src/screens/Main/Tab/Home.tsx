@@ -7,9 +7,11 @@ import {
   TextInput,
   View
 } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import { Button, Card, Text } from 'react-native-paper';
 // @ts-ignore
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import ProfilePlaceholder from '../../../components/ProfilePlaceholder';
+import RecipientInput from '../../../components/RecipientInput';
 import { Blockie } from '../../../components/scaffold-eth';
 import {
   useAccount,
@@ -41,54 +43,64 @@ export default function Home() {
             ? `${Number(parseBalance(balance)).toLocaleString('en-US')} ${network.currencySymbol}`
             : null}
         </Text>
-          <View style={styles.senderContainer}>
-            <Blockie address={account.address} size={3 * FONT_SIZE.xl} />
+        <View style={styles.senderContainer}>
+          <Blockie address={account.address} size={3 * FONT_SIZE.xl} />
 
-            <View style={styles.inputContainer}>
-              {isDollar && totalNativeValue && (
-                <Text style={styles.inputCurrencySymbol}>$</Text>
-              )}
-              <TextInput
-                placeholder={`0`}
-                keyboardType="number-pad"
-                style={styles.input}
-                placeholderTextColor="#aaa"
-              />
-              {!isDollar && totalNativeValue && (
-                <Text style={styles.inputCurrencySymbol}>
-                  {network.currencySymbol}
-                </Text>
-              )}
-            </View>
-
-            <Text style={styles.currencyConversion}>
-              ~{!isDollar && '$'} 10 {isDollar && network.currencySymbol}
-            </Text>
-
-            <View style={styles.actionButtonContainer}>
-              <Pressable style={styles.actionButton}>
-                {!isDollar ? (
-                  <FontAwesome name="dollar" style={styles.dollarIcon} />
-                ) : (
-                  <Image
-                    source={require('../../../assets/images/eth-icon.png')}
-                    style={{
-                      width: FONT_SIZE.lg * 1.6,
-                      height: FONT_SIZE.lg * 1.6
-                    }}
-                  />
-                )}
-              </Pressable>
-
-              <Pressable style={[styles.actionButton, styles.shareButton]}>
-                <FontAwesome name="share-alt" style={styles.shareIcon} />
-              </Pressable>
-            </View>
+          <View style={styles.inputContainer}>
+            {isDollar && totalNativeValue && (
+              <Text style={styles.inputCurrencySymbol}>$</Text>
+            )}
+            <TextInput
+              placeholder={`0`}
+              keyboardType="number-pad"
+              style={styles.input}
+              placeholderTextColor="#aaa"
+            />
+            {!isDollar && totalNativeValue && (
+              <Text style={styles.inputCurrencySymbol}>
+                {network.currencySymbol}
+              </Text>
+            )}
           </View>
 
-          <View style={styles.receiverContainer}>
-                
+          <Text style={styles.currencyConversion}>
+            ~{!isDollar && '$'} 10 {isDollar && network.currencySymbol}
+          </Text>
+
+          <View style={styles.actionButtonContainer}>
+            <Pressable style={styles.actionButton}>
+              {!isDollar ? (
+                <FontAwesome name="dollar" style={styles.dollarIcon} />
+              ) : (
+                <Image
+                  source={require('../../../assets/images/eth-icon.png')}
+                  style={{
+                    width: FONT_SIZE.lg * 1.6,
+                    height: FONT_SIZE.lg * 1.6
+                  }}
+                />
+              )}
+            </Pressable>
+
+            <Pressable style={[styles.actionButton, styles.shareButton]}>
+              <FontAwesome name="share-alt" style={styles.shareIcon} />
+            </Pressable>
           </View>
+        </View>
+
+        <View style={styles.receiverContainer}>
+          <ProfilePlaceholder />
+
+          <RecipientInput onSelect={console.log} />
+
+          <Button
+            mode="contained"
+            style={styles.button}
+            labelStyle={styles.buttonText}
+          >
+            Send
+          </Button>
+        </View>
       </Card>
     </View>
   );
@@ -99,7 +111,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'white'
   },
   transferContainer: {
     width: '90%',
@@ -153,16 +165,31 @@ const styles = StyleSheet.create({
     color: COLORS.primary
   },
   shareButton: {
-    backgroundColor: '#666'
+    backgroundColor: '#555'
   },
   shareIcon: {
     fontSize: FONT_SIZE.lg,
     color: 'white'
   },
   receiverContainer: {
-    backgroundColor: '#ccc',
-    height: 100,
+    backgroundColor: COLORS.lightGray,
     borderBottomStartRadius: 24,
-    borderBottomEndRadius: 24
+    borderBottomEndRadius: 24,
+    paddingVertical: 25,
+    paddingHorizontal: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20
+  },
+  button: {
+    width: '90%',
+    paddingVertical: 5,
+    borderRadius: 12,
+    backgroundColor: '#555'
+  },
+  buttonText: {
+    fontSize: FONT_SIZE.md,
+    color: 'white',
+    ...globalStyles.text
   }
 });
