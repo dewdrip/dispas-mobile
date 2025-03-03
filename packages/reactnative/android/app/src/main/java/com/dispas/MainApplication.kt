@@ -1,4 +1,4 @@
-package com.reactnative
+package com.dispas
 
 import android.app.Application
 import com.facebook.react.PackageList
