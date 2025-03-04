@@ -40,9 +40,14 @@ export default function RecipientInput({ onSelect }: Props) {
         onSubmitEditing={handleSelection}
       />
 
-      <Pressable onPress={handleSelection}>
-        <Ionicons name="checkmark-circle-outline" style={styles.confirmIcon} />
-      </Pressable>
+      {!!address && (
+        <Pressable onPress={handleSelection}>
+          <Ionicons
+            name="checkmark-circle-outline"
+            style={styles.confirmIcon}
+          />
+        </Pressable>
+      )}
     </View>
   );
 }

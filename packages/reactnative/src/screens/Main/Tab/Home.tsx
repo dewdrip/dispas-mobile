@@ -213,7 +213,7 @@ export default function Home() {
           <Blockie address={account.address} size={3 * FONT_SIZE.xl} />
 
           <View style={styles.inputContainer}>
-            {isDollar && totalNativeValue && (
+            {isDollar && !!totalNativeValue && (
               <Text style={styles.inputCurrencySymbol}>$</Text>
             )}
             <TextInput
@@ -224,7 +224,7 @@ export default function Home() {
               value={displayTotalValue}
               onChangeText={handleInput}
             />
-            {!isDollar && totalNativeValue && (
+            {!isDollar && !!totalNativeValue && (
               <Text style={styles.inputCurrencySymbol}>
                 {network.currencySymbol}
               </Text>
