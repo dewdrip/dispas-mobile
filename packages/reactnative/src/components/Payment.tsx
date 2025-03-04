@@ -126,7 +126,7 @@ export default function Payment({
         <View>
           <View style={styles.inputContainer}>
             <Pressable onPress={switchCurrency} style={styles.currencySwitch}>
-              {!isDollar ? (
+              {isDollar ? (
                 <FontAwesome name="dollar" style={styles.dollarIcon} />
               ) : (
                 <Image
@@ -164,9 +164,18 @@ export default function Payment({
         </View>
       ) : (
         <Pressable onPress={() => setShowInput(true)}>
-          <Text style={styles.amount}>{payment.amount} LYX</Text>
+          <Text style={styles.amount}>
+            {payment.amount} {network.currencySymbol}
+          </Text>
         </Pressable>
       )}
+
+      <Pressable
+        style={styles.closeIconContainer}
+        onPress={() => onClose(payment.recipient)}
+      >
+        <Ionicons name="close-circle-outline" style={styles.closeIcon} />
+      </Pressable>
     </View>
   );
 }
@@ -226,6 +235,17 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     color: '#777',
     ...globalStyles.text,
-    marginTop: 4
+    marginTop: 4,
+    maxWidth: 100,
+    textAlign: 'center'
+  },
+  closeIconContainer: {
+    position: 'absolute',
+    top: 0,
+    right: 0
+  },
+  closeIcon: {
+    fontSize: FONT_SIZE.lg,
+    color: COLORS.error
   }
 });

@@ -26,7 +26,7 @@ import {
 import globalStyles from '../../../styles/globalStyles';
 import { COLORS } from '../../../utils/constants';
 import { parseBalance } from '../../../utils/scaffold-eth';
-import { FONT_SIZE, WINDOW_WIDTH } from '../../../utils/styles';
+import { FONT_SIZE } from '../../../utils/styles';
 
 export default function Home() {
   const toast = useToast();
@@ -274,7 +274,7 @@ export default function Home() {
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ gap: 10 }}
+            contentContainerStyle={{ gap: 20 }}
           >
             {payments.length === 0 ? (
               <ProfilePlaceholder />
@@ -331,7 +331,8 @@ const styles = StyleSheet.create({
   },
   senderContainer: {
     alignItems: 'center',
-    paddingVertical: 10
+    paddingTop: 10,
+    paddingBottom: 20
   },
   inputContainer: {
     flexDirection: 'row',
