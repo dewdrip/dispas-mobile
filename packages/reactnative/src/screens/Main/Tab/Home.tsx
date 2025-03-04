@@ -8,8 +8,10 @@ import {
   View
 } from 'react-native';
 import { Button, Card, Text } from 'react-native-paper';
+import { useToast } from 'react-native-toast-notifications';
 // @ts-ignore
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+import { formatEther, parseEther } from 'viem';
 import Payment from '../../../components/Payment';
 import ProfilePlaceholder from '../../../components/ProfilePlaceholder';
 import RecipientInput from '../../../components/RecipientInput';
@@ -17,6 +19,8 @@ import { Blockie } from '../../../components/scaffold-eth';
 import {
   useAccount,
   useBalance,
+  useCryptoPrice,
+  useDeployedContractInfo,
   useNetwork
 } from '../../../hooks/scaffold-eth';
 import globalStyles from '../../../styles/globalStyles';
@@ -25,20 +29,181 @@ import { parseBalance } from '../../../utils/scaffold-eth';
 import { FONT_SIZE, WINDOW_WIDTH } from '../../../utils/styles';
 
 export default function Home() {
-  const account = useAccount();
-  const network = useNetwork();
-  const { balance } = useBalance({
-    address: account.address
-  });
+  const toast = useToast();
 
   const [totalNativeValue, setTotalNativeValue] = useState('');
   const [totalDollarValue, setTotalDollarValue] = useState('');
   const [isDollar, setIsDollar] = useState(false); // Toggle USD/LYX
   const [isSending, setIsSending] = useState(false);
+
+  const [payments, setPayments] = useState<any[]>([]);
+
+  const account = useAccount();
+  const network = useNetwork();
+  const { balance } = useBalance({ address: account.address });
+  const {
+    price: nativeCurrencyPrice,
+    loading: isFetchingNativeCurrency,
+    fetchPrice: fetchNativeCurrency
+  } = useCryptoPrice();
+
+  const formattedBalance = balance ? Number(formatEther(balance)) : 0;
+
+  const errorStyle = { color: 'red' };
+
+  const switchCurrency = () => {
+    if (!nativeCurrencyPrice) {
+      toast.show('Loading exchange rate', {
+        type: 'warning'
+      });
+
+      if (!isFetchingNativeCurrency) {
+        fetchNativeCurrency();
+      }
+
+      return;
+    }
+
+    setIsDollar(prev => !prev);
+  };
+
+  // Handle input conversion & enforce numeric values
+  const handleInput = (input: string) => {
+    if (input.trim() === '') {
+      setTotalNativeValue('');
+      setTotalDollarValue('');
+      return;
+    }
+
+    // Ensure only valid floating numbers are parsed
+    const numericValue = input.replace(/[^0-9.]/g, ''); // Remove non-numeric characters except `.`
+    if (!/^\d*\.?\d*$/.test(numericValue) || numericValue == '') return; // Ensure valid decimal format
+
+    if (!nativeCurrencyPrice) {
+      setTotalNativeValue(numericValue);
+      return;
+    }
+
+    if (isDollar) {
+      setTotalDollarValue(numericValue);
+      setTotalNativeValue(
+        (parseFloat(numericValue) / nativeCurrencyPrice).toString()
+      );
+    } else {
+      setTotalNativeValue(numericValue);
+      setTotalDollarValue(
+        (parseFloat(numericValue) * nativeCurrencyPrice).toFixed(2)
+      );
+    }
+  };
+
+  const displayTotalValue = isDollar ? totalDollarValue : totalNativeValue;
+  const displayConversion = isDollar ? totalNativeValue : totalDollarValue;
+  const isBalanceInsufficient = Number(totalNativeValue) > formattedBalance;
+
+  const handleRecipientSelection = (recipient: `0x${string}`): boolean => {
+    // Check if the recipient is already in the list
+    if (
+      payments.some(
+        payment => payment.recipient.toLowerCase() === recipient.toLowerCase()
+      )
+    ) {
+      toast.show('Recipient already added', {
+        type: 'danger'
+      });
+      return false;
+    }
+
+    // Add recipient with an initial amount of 0
+    // @ts-ignore
+    setPayments(prevPayments => [...prevPayments, { recipient, amount: '' }]);
+
+    return true;
+  };
+
+  const removePayment = (recipient: `0x${string}`) => {
+    setPayments(prevPayments =>
+      prevPayments.filter(
+        payment => payment.recipient.toLowerCase() !== recipient.toLowerCase()
+      )
+    );
+  };
+
+  const addRecipientAmount = (recipient: `0x${string}`, amount: string) => {
+    const payment = payments.find(
+      payment => payment.recipient.toLowerCase() === recipient.toLowerCase()
+    );
+
+    if (!payment) return;
+    // add the difference between the old and new amount
+    const newTotal =
+      (parseEther(totalNativeValue) || 0n) +
+      parseEther(amount) -
+      parseEther(payment.amount);
+
+    setTotalNativeValue(formatEther(newTotal));
+    if (nativeCurrencyPrice) {
+      setTotalDollarValue(
+        (parseFloat(formatEther(newTotal)) * nativeCurrencyPrice).toFixed(2)
+      );
+    }
+    // update amount
+    setPayments(prevPayments =>
+      prevPayments.map(payment =>
+        payment.recipient.toLowerCase() === recipient.toLowerCase()
+          ? { ...payment, amount }
+          : payment
+      )
+    );
+  };
+
+  const sumPayments = (): bigint =>
+    payments.reduce((sum, p) => sum + (parseEther(p.amount) || -1n), 0n);
+
+  const isSharedEqually = (): boolean =>
+    totalNativeValue === '' ||
+    payments.length === 0 ||
+    parseEther(totalNativeValue) === sumPayments();
+
+  const shareEqually = () => {
+    if (
+      payments.length === 0 ||
+      Number(totalNativeValue) === 0 ||
+      isSharedEqually()
+    )
+      return;
+
+    const total = parseEther(totalNativeValue);
+    const share = total / BigInt(payments.length);
+
+    setPayments(prevPayments =>
+      prevPayments.map(payment => ({
+        ...payment,
+        amount: formatEther(share)
+      }))
+    );
+
+    const newTotal = share * BigInt(payments.length);
+
+    setTotalNativeValue(formatEther(newTotal));
+
+    if (nativeCurrencyPrice) {
+      setTotalDollarValue(
+        (Number(formatEther(newTotal)) * nativeCurrencyPrice).toFixed(2)
+      );
+    }
+
+    if (total !== newTotal) {
+      toast.show('Total amount has been adjusted for precision', {
+        type: 'warning'
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Card style={styles.transferContainer}>
-        <Text style={{ textAlign: 'right', padding: 10 }}>
+        <Text style={styles.balance}>
           Balance:{' '}
           {balance !== null
             ? `${Number(parseBalance(balance)).toLocaleString('en-US')} ${network.currencySymbol}`
@@ -56,6 +221,8 @@ export default function Home() {
               keyboardType="number-pad"
               style={styles.input}
               placeholderTextColor="#aaa"
+              value={displayTotalValue}
+              onChangeText={handleInput}
             />
             {!isDollar && totalNativeValue && (
               <Text style={styles.inputCurrencySymbol}>
@@ -64,13 +231,23 @@ export default function Home() {
             )}
           </View>
 
-          <Text style={styles.currencyConversion}>
-            ~{!isDollar && '$'} 10 {isDollar && network.currencySymbol}
+          <Text
+            style={[
+              styles.currencyConversion,
+              isBalanceInsufficient
+                ? errorStyle
+                : {
+                    opacity: totalNativeValue && totalDollarValue ? 1 : 0
+                  }
+            ]}
+          >
+            ~{!isDollar && '$'} {displayConversion}{' '}
+            {isDollar && network.currencySymbol}
           </Text>
 
           <View style={styles.actionButtonContainer}>
-            <Pressable style={styles.actionButton}>
-              {!isDollar ? (
+            <Pressable style={styles.actionButton} onPress={switchCurrency}>
+              {isDollar ? (
                 <FontAwesome name="dollar" style={styles.dollarIcon} />
               ) : (
                 <Image
@@ -83,20 +260,40 @@ export default function Home() {
               )}
             </Pressable>
 
-            <Pressable style={[styles.actionButton, styles.shareButton]}>
+            <Pressable
+              style={[styles.actionButton, styles.shareButton]}
+              onPress={shareEqually}
+              disabled={isSharedEqually()}
+            >
               <FontAwesome name="share-alt" style={styles.shareIcon} />
             </Pressable>
           </View>
         </View>
 
         <View style={styles.receiverContainer}>
-          {/* <ProfilePlaceholder /> */}
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ gap: 10 }}
+          >
+            {payments.length === 0 ? (
+              <ProfilePlaceholder />
+            ) : (
+              payments.map(payment => (
+                <Payment
+                  key={payment.recipient}
+                  payment={payment}
+                  nativeCurrencyPrice={nativeCurrencyPrice}
+                  isFetchingNativeCurrency={isFetchingNativeCurrency}
+                  onClose={removePayment}
+                  onChange={addRecipientAmount}
+                  fetchNativeCurrency={fetchNativeCurrency}
+                />
+              ))
+            )}
+          </ScrollView>
 
-          <View>
-            <Payment />
-          </View>
-
-          <RecipientInput onSelect={console.log} />
+          <RecipientInput onSelect={handleRecipientSelection} />
 
           <Button
             mode="contained"
@@ -117,6 +314,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: 'white'
+  },
+  balance: {
+    ...globalStyles.text,
+    fontSize: FONT_SIZE.sm,
+    textAlign: 'right',
+    padding: 10
   },
   transferContainer: {
     width: '90%',
@@ -140,7 +343,7 @@ const styles = StyleSheet.create({
     maxWidth: '85%'
   },
   inputCurrencySymbol: {
-    marginBottom: 5,
+    marginBottom: 7,
     fontSize: FONT_SIZE.lg
   },
   currencyConversion: {

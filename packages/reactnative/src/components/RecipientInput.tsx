@@ -26,6 +26,7 @@ export default function RecipientInput({ onSelect }: Props) {
     }
 
     onSelect(address);
+    setAddress('');
   };
 
   return (
