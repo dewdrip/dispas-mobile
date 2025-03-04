@@ -21,7 +21,8 @@ import {
   useBalance,
   useCryptoPrice,
   useNetwork,
-  useScaffoldContractWrite
+  useScaffoldContractWrite,
+  useTransfer
 } from '../../../hooks/scaffold-eth';
 import globalStyles from '../../../styles/globalStyles';
 import { COLORS } from '../../../utils/constants';
@@ -200,6 +201,7 @@ export default function Home() {
     }
   };
 
+  const { transfer } = useTransfer();
   const { write } = useScaffoldContractWrite({
     contractName: 'Dispas',
     functionName: 'distributeFunds'
@@ -240,10 +242,17 @@ export default function Home() {
         amount: parseEther(payment.amount)
       }));
 
-      await write({
-        args: [_payments],
-        value: sumPayments()
-      });
+      if (_payments.length === 1) {
+        await transfer({
+          to: _payments[0].recipient,
+          value: _payments[0].amount
+        });
+      } else {
+        await write({
+          args: [_payments],
+          value: sumPayments()
+        });
+      }
 
       toast.show('Transfer successful! 🚀', {
         type: 'success'
