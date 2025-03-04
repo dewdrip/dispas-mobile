@@ -194,6 +194,8 @@ export default function Home() {
       );
     }
 
+    toast.show('Funds shared equally');
+
     if (total !== newTotal) {
       toast.show('Total amount has been adjusted for precision', {
         type: 'warning'
