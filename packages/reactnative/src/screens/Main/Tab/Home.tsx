@@ -206,10 +206,6 @@ export default function Home() {
   });
 
   const send = async () => {
-    if (!account.isConnected) {
-      toast.show('Please connect your wallet');
-      return;
-    }
     if (totalNativeValue === '' || Number(totalNativeValue) === 0) {
       toast.show('Please input a valid total amount!', {
         type: 'danger'
