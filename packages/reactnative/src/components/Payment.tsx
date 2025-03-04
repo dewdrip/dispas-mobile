@@ -170,10 +170,7 @@ export default function Payment({
         </Pressable>
       )}
 
-      <Pressable
-        style={styles.closeIconContainer}
-        onPress={() => onClose(payment.recipient)}
-      >
+      <Pressable onPress={() => onClose(payment.recipient)}>
         <Ionicons name="close-circle-outline" style={styles.closeIcon} />
       </Pressable>
     </View>
@@ -238,11 +235,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     maxWidth: 100,
     textAlign: 'center'
-  },
-  closeIconContainer: {
-    position: 'absolute',
-    top: 0,
-    right: 0
   },
   closeIcon: {
     fontSize: FONT_SIZE.lg,

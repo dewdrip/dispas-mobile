@@ -20,8 +20,8 @@ import {
   useAccount,
   useBalance,
   useCryptoPrice,
-  useDeployedContractInfo,
-  useNetwork
+  useNetwork,
+  useScaffoldContractWrite
 } from '../../../hooks/scaffold-eth';
 import globalStyles from '../../../styles/globalStyles';
 import { COLORS } from '../../../utils/constants';
@@ -200,6 +200,72 @@ export default function Home() {
     }
   };
 
+  const { write } = useScaffoldContractWrite({
+    contractName: 'Dispas',
+    functionName: 'distributeFunds'
+  });
+
+  const send = async () => {
+    if (!account.isConnected) {
+      toast.show('Please connect your wallet');
+      return;
+    }
+    if (totalNativeValue === '' || Number(totalNativeValue) === 0) {
+      toast.show('Please input a valid total amount!', {
+        type: 'danger'
+      });
+      return;
+    }
+
+    // Ensure all payments have valid amounts
+    const hasInvalidPayment = payments.some(
+      payment => !payment.amount || Number(payment.amount) <= 0
+    );
+    if (hasInvalidPayment) {
+      toast.show('All recipients must have a valid amount greater than zero!', {
+        type: 'danger'
+      });
+      return;
+    }
+
+    // Ensure total of payments matches the inputted amount
+    if (!isSharedEqually()) {
+      toast.show('Total amount does not match sum of payments!', {
+        type: 'danger'
+      });
+      return;
+    }
+
+    try {
+      setIsSending(true);
+
+      const _payments = payments.map(payment => ({
+        ...payment,
+        amount: parseEther(payment.amount)
+      }));
+
+      await write({
+        args: [_payments],
+        value: sumPayments()
+      });
+
+      toast.show('Transfer successful! 🚀', {
+        type: 'success'
+      });
+
+      setTotalNativeValue('');
+      setTotalDollarValue('');
+      setPayments([]);
+    } catch (error) {
+      console.error('Failed to send: ', error);
+      toast.show('Transfer failed. Check logs to see more details!', {
+        type: 'danger'
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Card style={styles.transferContainer}>
@@ -299,8 +365,10 @@ export default function Home() {
             mode="contained"
             style={styles.button}
             labelStyle={styles.buttonText}
+            onPress={send}
+            disabled={isSending}
           >
-            Send
+            {payments.length > 1 ? 'Distribute' : 'Send'}
           </Button>
         </View>
       </Card>
