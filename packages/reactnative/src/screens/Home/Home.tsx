@@ -28,6 +28,7 @@ import globalStyles from '../../styles/globalStyles';
 import { COLORS } from '../../utils/constants';
 import { parseBalance } from '../../utils/scaffold-eth';
 import { FONT_SIZE } from '../../utils/styles';
+import Header from './modules/Header';
 
 export default function Home() {
   const toast = useToast();
@@ -275,6 +276,8 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
+      <Header />
+
       <Card style={styles.transferContainer}>
         <Text style={styles.balance}>
           Balance:{' '}
@@ -386,8 +389,6 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: 'white'
   },
   balance: {
@@ -402,7 +403,8 @@ const styles = StyleSheet.create({
     borderColor: COLORS.gray,
     borderRadius: 24,
     backgroundColor: 'white',
-    gap: 24
+    gap: 24,
+    alignSelf: 'center'
   },
   senderContainer: {
     alignItems: 'center',
