@@ -6,9 +6,9 @@ import {
   ScrollView,
   StyleSheet
 } from 'react-native';
-import Footer from './modules/wallet/Footer';
-import Header from './modules/wallet/Header';
-import MainBalance from './modules/wallet/MainBalance';
+import Footer from './modules/Footer';
+import Header from './modules/Header';
+import MainBalance from './modules/MainBalance';
 
 let backHandler: NativeEventSubscription;
 

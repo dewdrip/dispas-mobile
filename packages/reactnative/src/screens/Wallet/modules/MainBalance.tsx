@@ -11,20 +11,17 @@ import { useModal } from 'react-native-modalfy';
 import { IconButton, Text } from 'react-native-paper';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import { CopyableText } from '../../../../../components/scaffold-eth';
+import { CopyableText } from '../../../components/scaffold-eth';
 import {
   useAccount,
   useBalance,
   useCryptoPrice,
   useNetwork
-} from '../../../../../hooks/scaffold-eth';
-import globalStyles from '../../../../../styles/globalStyles';
-import { COLORS } from '../../../../../utils/constants';
-import {
-  parseBalance,
-  truncateAddress
-} from '../../../../../utils/scaffold-eth';
-import { FONT_SIZE } from '../../../../../utils/styles';
+} from '../../../hooks/scaffold-eth';
+import globalStyles from '../../../styles/globalStyles';
+import { COLORS } from '../../../utils/constants';
+import { parseBalance, truncateAddress } from '../../../utils/scaffold-eth';
+import { FONT_SIZE } from '../../../utils/styles';
 
 type Props = {
   backHandler: any;
@@ -46,14 +43,14 @@ function MainBalance({ backHandler }: Props) {
   const { openModal } = useModal();
 
   const logo = useMemo(() => {
-    let _logo = require('../../../../../assets/images/eth-icon.png');
+    let _logo = require('../../../assets/images/eth-icon.png');
 
     if (['Polygon', 'Mumbai'].includes(network.name)) {
-      _logo = require('../../../../../assets/images/polygon-icon.png');
+      _logo = require('../../../assets/images/polygon-icon.png');
     } else if (['Arbitrum', 'Arbitrum Goerli'].includes(network.name)) {
-      _logo = require('../../../../../assets/images/arbitrum-icon.png');
+      _logo = require('../../../assets/images/arbitrum-icon.png');
     } else if (['Optimism', 'Optimism Goerli'].includes(network.name)) {
-      _logo = require('../../../../../assets/images/optimism-icon.png');
+      _logo = require('../../../assets/images/optimism-icon.png');
     }
 
     return (

@@ -9,14 +9,16 @@ import ImportWallet from './Authentication/ImportWallet';
 import Login from './Authentication/Login';
 import Onboarding from './Authentication/Onboarding';
 import WalletSetup from './Authentication/WalletSetup';
-import Main from './Main';
+import Home from './Home';
 import NFTs from './NFTs';
+import Settings from './Settings';
 import TokenDetails from './TokenDetails';
 import Tokens from './Tokens';
 import Transactions from './Transactions';
 import ERC20TokenTransfer from './Transfer/ERC20TokenTransfer';
 import NetworkTokenTransfer from './Transfer/NetworkTokenTransfer';
 import NFTTokenTransfer from './Transfer/NFTTokenTransfer';
+import Wallet from './Wallet';
 
 type Props = {};
 
@@ -27,7 +29,9 @@ type AppStackParamsList = {
   CreateWallet: undefined;
   CreatePassword: undefined;
   Login: undefined;
-  Main: undefined;
+  Home: undefined;
+  Wallet: undefined;
+  Settings: undefined;
   NetworkTokenTransfer: undefined;
   ERC20TokenTransfer: {
     token: Token;
@@ -70,7 +74,9 @@ export default function Navigation({}: Props) {
           </>
         )}
         <AppStack.Screen name="Login" component={Login} />
-        <AppStack.Screen name="Main" component={Main} />
+        <AppStack.Screen name="Home" component={Home} />
+        <AppStack.Screen name="Wallet" component={Wallet} />
+        <AppStack.Screen name="Settings" component={Settings} />
         <AppStack.Screen
           name="NetworkTokenTransfer"
           component={NetworkTokenTransfer}

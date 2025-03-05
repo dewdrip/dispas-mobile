@@ -12,14 +12,14 @@ import Share from 'react-native-share';
 import { useToast } from 'react-native-toast-notifications';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import { Network } from '../../../../../../scaffold.config';
-import Logo from '../../../../../components/Logo';
-import { Blockie } from '../../../../../components/scaffold-eth';
-import { useAccount, useNetwork } from '../../../../../hooks/scaffold-eth';
-import { Account } from '../../../../../store/reducers/Accounts';
-import globalStyles from '../../../../../styles/globalStyles';
-import { COLORS } from '../../../../../utils/constants';
-import { FONT_SIZE, WINDOW_WIDTH } from '../../../../../utils/styles';
+import { Network } from '../../../../scaffold.config';
+import Logo from '../../../components/Logo';
+import { Blockie } from '../../../components/scaffold-eth';
+import { useAccount, useNetwork } from '../../../hooks/scaffold-eth';
+import { Account } from '../../../store/reducers/Accounts';
+import globalStyles from '../../../styles/globalStyles';
+import { COLORS } from '../../../utils/constants';
+import { FONT_SIZE, WINDOW_WIDTH } from '../../../utils/styles';
 
 type Props = {};
 

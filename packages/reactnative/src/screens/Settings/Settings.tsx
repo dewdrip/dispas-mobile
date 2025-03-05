@@ -7,11 +7,11 @@ import { Divider, Switch, Text } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
 //@ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import { useNetwork, useSecureStorage } from '../../../hooks/scaffold-eth';
-import globalStyles from '../../../styles/globalStyles';
-import { Security } from '../../../types/security';
-import { COLORS } from '../../../utils/constants';
-import { FONT_SIZE } from '../../../utils/styles';
+import { useNetwork, useSecureStorage } from '../../hooks/scaffold-eth';
+import globalStyles from '../../styles/globalStyles';
+import { Security } from '../../types/security';
+import { COLORS } from '../../utils/constants';
+import { FONT_SIZE } from '../../utils/styles';
 
 type Props = {};
 

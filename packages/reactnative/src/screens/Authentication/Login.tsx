@@ -48,7 +48,7 @@ export default function Login({}: Props) {
     }
 
     // @ts-ignore
-    navigation.navigate('Main');
+    navigation.navigate('Home');
   };
 
   const unlockWithPassword = async () => {

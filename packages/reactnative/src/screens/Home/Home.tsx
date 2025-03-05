@@ -12,10 +12,10 @@ import { useToast } from 'react-native-toast-notifications';
 // @ts-ignore
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 import { formatEther, parseEther } from 'viem';
-import Payment from '../../../components/Payment';
-import ProfilePlaceholder from '../../../components/ProfilePlaceholder';
-import RecipientInput from '../../../components/RecipientInput';
-import { Blockie } from '../../../components/scaffold-eth';
+import Payment from '../../components/Payment';
+import ProfilePlaceholder from '../../components/ProfilePlaceholder';
+import RecipientInput from '../../components/RecipientInput';
+import { Blockie } from '../../components/scaffold-eth';
 import {
   useAccount,
   useBalance,
@@ -23,11 +23,11 @@ import {
   useNetwork,
   useScaffoldContractWrite,
   useTransfer
-} from '../../../hooks/scaffold-eth';
-import globalStyles from '../../../styles/globalStyles';
-import { COLORS } from '../../../utils/constants';
-import { parseBalance } from '../../../utils/scaffold-eth';
-import { FONT_SIZE } from '../../../utils/styles';
+} from '../../hooks/scaffold-eth';
+import globalStyles from '../../styles/globalStyles';
+import { COLORS } from '../../utils/constants';
+import { parseBalance } from '../../utils/scaffold-eth';
+import { FONT_SIZE } from '../../utils/styles';
 
 export default function Home() {
   const toast = useToast();
@@ -324,7 +324,7 @@ export default function Home() {
                 <FontAwesome name="dollar" style={styles.dollarIcon} />
               ) : (
                 <Image
-                  source={require('../../../assets/images/eth-icon.png')}
+                  source={require('../../assets/images/eth-icon.png')}
                   style={{
                     width: FONT_SIZE.lg * 1.6,
                     height: FONT_SIZE.lg * 1.6
