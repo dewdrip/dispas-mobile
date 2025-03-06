@@ -56,7 +56,7 @@ export default function Header({}: Props) {
 
   return (
     <View style={styles.container}>
-      <Logo size={WINDOW_WIDTH * 0.08} />
+      <Logo size={WINDOW_WIDTH * 0.12} />
 
       <Menu>
         <MenuTrigger>

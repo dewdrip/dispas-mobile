@@ -68,7 +68,7 @@ export default function CreateWallet({}: Props) {
       dispatch(initAccounts([{ ...initWallet }]));
       dispatch(loginUser());
       //@ts-ignore
-      navigation.navigate('Main');
+      navigation.navigate('Home');
     } catch (error) {
       return;
     }
