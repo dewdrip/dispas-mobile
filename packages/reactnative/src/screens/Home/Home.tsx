@@ -299,7 +299,7 @@ export default function Home() {
   }, [network]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Header />
 
       <Card style={styles.transferContainer}>
@@ -401,14 +401,15 @@ export default function Home() {
           </Button>
         </View>
       </Card>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    paddingBottom: 4
   },
   balance: {
     ...globalStyles.text,
