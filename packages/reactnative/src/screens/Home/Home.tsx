@@ -377,6 +377,7 @@ export default function Home() {
             labelStyle={styles.buttonText}
             onPress={send}
             disabled={isSending}
+            loading={isSending}
           >
             {payments.length > 1 ? 'Distribute' : 'Send'}
           </Button>
