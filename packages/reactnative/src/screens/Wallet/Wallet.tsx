@@ -1,42 +1,19 @@
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import React, { useEffect } from 'react';
-import {
-  BackHandler,
-  NativeEventSubscription,
-  ScrollView,
-  StyleSheet
-} from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+import React from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
 import Footer from './modules/Footer';
 import Header from './modules/Header';
 import MainBalance from './modules/MainBalance';
 
-let backHandler: NativeEventSubscription;
-
-type Props = {};
-
-export default function Wallet({}: Props) {
+export default function Wallet() {
   const isFocused = useIsFocused();
-
-  useFocusEffect(() => {
-    backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      BackHandler.exitApp();
-
-      return true;
-    });
-  });
-
-  useEffect(() => {
-    return () => {
-      backHandler?.remove();
-    };
-  }, []);
 
   if (!isFocused) return;
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Header />
-      <MainBalance backHandler={backHandler} />
+      <MainBalance />
       <Footer />
     </ScrollView>
   );

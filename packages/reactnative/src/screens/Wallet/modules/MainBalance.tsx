@@ -23,11 +23,7 @@ import { COLORS } from '../../../utils/constants';
 import { parseBalance, truncateAddress } from '../../../utils/scaffold-eth';
 import { FONT_SIZE } from '../../../utils/styles';
 
-type Props = {
-  backHandler: any;
-};
-
-function MainBalance({ backHandler }: Props) {
+function MainBalance() {
   const network = useNetwork();
   const account = useAccount();
   const { balance, isRefetching, refetch } = useBalance({
@@ -63,7 +59,6 @@ function MainBalance({ backHandler }: Props) {
   const handleNav = () => {
     // @ts-ignore
     navigation.navigate('NetworkTokenTransfer');
-    backHandler?.remove();
   };
 
   useEffect(() => {
