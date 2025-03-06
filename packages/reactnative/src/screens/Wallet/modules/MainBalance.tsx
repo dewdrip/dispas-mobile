@@ -39,21 +39,29 @@ function MainBalance() {
   const { openModal } = useModal();
 
   const logo = useMemo(() => {
-    let _logo = require('../../../assets/images/eth-icon.png');
-
-    if (['Polygon', 'Mumbai'].includes(network.name)) {
-      _logo = require('../../../assets/images/polygon-icon.png');
-    } else if (['Arbitrum', 'Arbitrum Goerli'].includes(network.name)) {
-      _logo = require('../../../assets/images/arbitrum-icon.png');
-    } else if (['Optimism', 'Optimism Goerli'].includes(network.name)) {
-      _logo = require('../../../assets/images/optimism-icon.png');
+    if (network.name === 'Arbitrum') {
+      return (
+        <Image
+          source={require('../../../assets/images/arbitrum_logo.png')}
+          style={{
+            width: FONT_SIZE.xl * 4,
+            height: FONT_SIZE.xl * 4,
+            marginVertical: 8
+          }}
+        />
+      );
+    } else {
+      return (
+        <Image
+          source={require('../../../assets/images/lukso_logo.png')}
+          style={{
+            width: FONT_SIZE.xl * 3,
+            height: FONT_SIZE.xl * 3,
+            marginVertical: 8
+          }}
+        />
+      );
     }
-
-    return (
-      <View style={styles.logoContainer}>
-        <Image source={_logo} style={styles.networkLogo} />
-      </View>
-    );
   }, [network]);
 
   const handleNav = () => {
@@ -172,13 +180,6 @@ const styles = StyleSheet.create({
   nameText: {
     textAlign: 'center',
     ...globalStyles.textMedium
-  },
-  logoContainer: {
-    marginVertical: 8
-  },
-  networkLogo: {
-    width: 4 * FONT_SIZE['xl'],
-    height: 4 * FONT_SIZE['xl']
   },
   addressContainer: {
     paddingHorizontal: 15,

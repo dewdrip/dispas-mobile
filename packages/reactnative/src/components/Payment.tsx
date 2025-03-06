@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Image, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Text } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
@@ -113,6 +113,31 @@ export default function Payment({
     }
   }, [payment.amount, nativeCurrencyPrice]);
 
+  const logo = useMemo(() => {
+    if (network.name === 'Arbitrum') {
+      return (
+        <Image
+          source={require('../assets/images/arbitrum_logo.png')}
+          style={{
+            width: FONT_SIZE.lg * 1.6,
+            height: FONT_SIZE.lg * 1.6,
+            marginLeft: -5
+          }}
+        />
+      );
+    } else {
+      return (
+        <Image
+          source={require('../assets/images/lukso_logo.png')}
+          style={{
+            width: FONT_SIZE.lg * 1.2,
+            height: FONT_SIZE.lg * 1.2
+          }}
+        />
+      );
+    }
+  }, [network]);
+
   return (
     <View style={styles.container}>
       <Blockie
@@ -129,10 +154,7 @@ export default function Payment({
               {isDollar ? (
                 <FontAwesome name="dollar" style={styles.dollarIcon} />
               ) : (
-                <Image
-                  source={require('../assets/images/eth-icon.png')}
-                  style={styles.nativeIcon}
-                />
+                logo
               )}
             </Pressable>
 
@@ -205,11 +227,6 @@ const styles = StyleSheet.create({
   },
   currencySwitch: {
     marginHorizontal: 2
-  },
-  nativeIcon: {
-    width: FONT_SIZE.lg,
-    height: FONT_SIZE.lg * 1.5,
-    marginLeft: -5
   },
   dollarIcon: {
     fontSize: FONT_SIZE.lg,

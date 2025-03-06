@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Image,
   Pressable,
@@ -47,7 +47,7 @@ export default function Home() {
     price: nativeCurrencyPrice,
     loading: isFetchingNativeCurrency,
     fetchPrice: fetchNativeCurrency
-  } = useCryptoPrice();
+  } = useCryptoPrice({ priceID: network.coingeckoPriceId });
 
   const formattedBalance = balance ? Number(formatEther(balance)) : 0;
 
@@ -274,6 +274,30 @@ export default function Home() {
     }
   };
 
+  const logo = useMemo(() => {
+    if (network.name === 'Arbitrum') {
+      return (
+        <Image
+          source={require('../../assets/images/arbitrum_logo.png')}
+          style={{
+            width: FONT_SIZE.lg * 1.6,
+            height: FONT_SIZE.lg * 1.6
+          }}
+        />
+      );
+    } else {
+      return (
+        <Image
+          source={require('../../assets/images/lukso_logo.png')}
+          style={{
+            width: FONT_SIZE.lg * 1.3,
+            height: FONT_SIZE.lg * 1.3
+          }}
+        />
+      );
+    }
+  }, [network]);
+
   return (
     <View style={styles.container}>
       <Header />
@@ -326,13 +350,7 @@ export default function Home() {
               {isDollar ? (
                 <FontAwesome name="dollar" style={styles.dollarIcon} />
               ) : (
-                <Image
-                  source={require('../../assets/images/eth-icon.png')}
-                  style={{
-                    width: FONT_SIZE.lg * 1.6,
-                    height: FONT_SIZE.lg * 1.6
-                  }}
-                />
+                logo
               )}
             </Pressable>
 
