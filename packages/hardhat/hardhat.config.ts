@@ -55,6 +55,10 @@ const config: HardhatUserConfig = {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey]
     },
+    lukso: {
+      url: 'https://rpc.mainnet.lukso.network',
+      accounts: [deployerPrivateKey]
+    },
     sepolia: {
       url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey]
