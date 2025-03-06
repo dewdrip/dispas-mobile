@@ -59,11 +59,10 @@ export default function Onboarding({}: Props) {
       </View>
       <View style={styles.content}>
         <Text variant="headlineLarge" style={styles.title}>
-          Happy Coding
+          Dispas
         </Text>
         <Text variant="bodyLarge" style={styles.subtitle}>
-          Our goal is to ensure that you have everything you need to feel
-          comfortable, confident, and ready to make an impact.
+          Manage payroll, allowances, donations, e.t.c
         </Text>
 
         <Button
