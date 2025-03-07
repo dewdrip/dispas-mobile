@@ -4,7 +4,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import Logo from '../../../components/Logo';
-import globalStyles from '../../../styles/globalStyles';
 import { FONT_SIZE } from '../../../utils/styles';
 
 type Props = {};
@@ -42,10 +41,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingVertical: 16,
     paddingHorizontal: 10
-  },
-  title: {
-    fontSize: FONT_SIZE.xl * 1.2,
-    ...globalStyles.textMedium
   },
   icons: {
     flexDirection: 'row',

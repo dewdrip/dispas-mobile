@@ -34,6 +34,7 @@ import { COLORS } from '../../utils/constants';
 import { parseBalance, truncateAddress } from '../../utils/scaffold-eth';
 import { FONT_SIZE } from '../../utils/styles';
 import Header from './modules/Header';
+import History from './modules/History';
 
 export default function Home() {
   const toast = useToast();
@@ -117,9 +118,7 @@ export default function Home() {
         payment => payment.recipient.toLowerCase() === recipient.toLowerCase()
       )
     ) {
-      toast.show('Recipient already added', {
-        type: 'danger'
-      });
+      toast.show('Recipient already added');
       return false;
     }
 
@@ -473,6 +472,8 @@ export default function Home() {
           </Button>
         </View>
       </Card>
+
+      <History onSelect={handleRecipientSelection} />
     </ScrollView>
   );
 }
