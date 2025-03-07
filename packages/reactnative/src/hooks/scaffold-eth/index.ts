@@ -18,3 +18,4 @@ export * from './useTokens';
 export * from './useTransactions';
 export * from './useWallet';
 export * from './useTransfer';
+export * from './useNetworkSwitch';

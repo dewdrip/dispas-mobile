@@ -11,6 +11,8 @@ import { Button, Card, Text } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
 // @ts-ignore
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
+// @ts-ignore
+import FontAwesome6 from 'react-native-vector-icons/dist/FontAwesome6';
 import { formatEther, parseEther } from 'viem';
 import Payment from '../../components/Payment';
 import ProfilePlaceholder from '../../components/ProfilePlaceholder';
@@ -21,6 +23,7 @@ import {
   useBalance,
   useCryptoPrice,
   useNetwork,
+  useNetworkSwitch,
   useScaffoldContractWrite,
   useTransfer
 } from '../../hooks/scaffold-eth';
@@ -298,6 +301,8 @@ export default function Home() {
 
   const [showFullBalance, setShowFullBalance] = useState(false);
 
+  const { switchNetwork } = useNetworkSwitch();
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Header />
@@ -367,6 +372,13 @@ export default function Home() {
               disabled={isSharedEqually()}
             >
               <FontAwesome name="share-alt" style={styles.shareIcon} />
+            </Pressable>
+
+            <Pressable
+              style={[styles.actionButton, styles.networkSwitchButton]}
+              onPress={switchNetwork}
+            >
+              <FontAwesome6 name="shuffle" style={styles.switchIcon} />
             </Pressable>
           </View>
         </View>
@@ -486,9 +498,15 @@ const styles = StyleSheet.create({
   shareButton: {
     backgroundColor: '#555'
   },
+  networkSwitchButton: {
+    borderWidth: 1
+  },
   shareIcon: {
     fontSize: FONT_SIZE.lg,
     color: 'white'
+  },
+  switchIcon: {
+    fontSize: FONT_SIZE.lg
   },
   receiverContainer: {
     backgroundColor: COLORS.lightGray,

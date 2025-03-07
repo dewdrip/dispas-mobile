@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useNetwork } from './useNetwork';
 
 const COINGECKO_PRICE_API_ROUTE =
   'https://api.coingecko.com/api/v3/simple/price';
@@ -55,11 +56,13 @@ export const useCryptoPrice = ({
     }
   };
 
+  const network = useNetwork();
+
   useEffect(() => {
     if (!enabled) return;
 
     fetchPrice();
-  }, [priceID, decimalPlaces]);
+  }, [priceID, decimalPlaces, network]);
 
   return {
     ...state,
