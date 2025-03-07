@@ -284,12 +284,9 @@ export default function Home() {
       setPayments([]);
     } catch (error) {
       console.error('Failed to send: ', error);
-      toast.show(
-        'Transfer failed. Please ensure you have a stable network and try again',
-        {
-          type: 'danger'
-        }
-      );
+      openModal('TxFailModal', {
+        onRetry: send
+      });
     } finally {
       setIsSending(false);
     }

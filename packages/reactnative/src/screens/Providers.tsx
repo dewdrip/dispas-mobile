@@ -32,6 +32,7 @@ import SwitchNetworkModal from '../components/modals/SwitchNetworkModal';
 import TransactionDetailsModal from '../components/modals/TransactionDetailsModal';
 import TransferConfirmationModal from '../components/modals/TransferConfirmationModal';
 import TransferModal from '../components/modals/TransferModal';
+import TxFailModal from '../components/modals/TxFailModal';
 import TxReceiptModal from '../components/modals/TxReceiptModal';
 import TxSuccessModal from '../components/modals/TxSuccessModal';
 import { persistor, store } from '../store';
@@ -72,7 +73,8 @@ const modalConfig = {
   SeedPhraseModal,
   TransactionDetailsModal,
   TransferModal,
-  TxSuccessModal
+  TxSuccessModal,
+  TxFailModal
 };
 const defaultOptions: ModalOptions = {
   backdropOpacity: 0.6,
