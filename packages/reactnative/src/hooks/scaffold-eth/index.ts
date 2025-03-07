@@ -19,3 +19,5 @@ export * from './useTransactions';
 export * from './useWallet';
 export * from './useTransfer';
 export * from './useNetworkSwitch';
+export * from './useProvider';
+export * from './useENSProvider';

@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
 //@ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
+import { useDebounceValue } from 'usehooks-ts';
 import { isAddress } from 'viem';
+import { useENSProvider } from '../hooks/scaffold-eth';
 import globalStyles from '../styles/globalStyles';
 import { COLORS } from '../utils/constants';
 import { FONT_SIZE } from '../utils/styles';
@@ -15,38 +17,107 @@ type Props = {
 export default function RecipientInput({ onSelect }: Props) {
   const toast = useToast();
 
-  const [address, setAddress] = useState('');
+  const [input, setInput] = useState('');
+  const [resolvedAddress, setResolvedAddress] = useState('');
+  const [isResolving, setIsResolving] = useState(false);
+
+  const [debouncedInput] = useDebounceValue(input, 500);
+
+  const ensProvider = useENSProvider();
+
+  const resolveENS = useCallback(async (value: string) => {
+    if (!value) {
+      setResolvedAddress('');
+      return;
+    }
+
+    if (isAddress(value)) {
+      setResolvedAddress(value as `0x${string}`);
+      return;
+    }
+
+    if (value.endsWith('.eth')) {
+      try {
+        setIsResolving(true);
+        const resolved = await ensProvider.getResolver(value);
+        if (resolved) {
+          setResolvedAddress(resolved.address);
+        } else {
+          setResolvedAddress('');
+        }
+      } catch (error) {
+        console.error('ENS resolution error:', error);
+        setResolvedAddress('');
+      } finally {
+        setIsResolving(false);
+      }
+    } else {
+      setResolvedAddress('');
+    }
+  }, []);
+
+  useEffect(() => {
+    resolveENS(debouncedInput);
+  }, [debouncedInput]);
+
+  const addRecipient = (address: `0x${string}`) => {
+    onSelect(address);
+    setInput('');
+    setResolvedAddress('');
+  };
 
   const handleSelection = () => {
-    if (!isAddress(address)) {
-      toast.show('Invalid address', {
+    if (isAddress(input)) {
+      addRecipient(input);
+      return;
+    }
+
+    if (!resolvedAddress) {
+      toast.show('Invalid address or ENS name', {
         type: 'danger'
       });
       return;
     }
 
-    onSelect(address);
-    setAddress('');
+    addRecipient(resolvedAddress as `0x${string}`);
+  };
+
+  const handleInputChange = (value: string) => {
+    if (resolvedAddress) {
+      setResolvedAddress('');
+    }
+
+    setInput(value);
   };
 
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder="Enter address of recipient"
+        placeholder="Enter address or ENS name"
         placeholderTextColor="#bbb"
         style={styles.input}
-        value={address}
-        onChangeText={setAddress}
+        value={resolvedAddress || input}
+        onChangeText={handleInputChange}
         onSubmitEditing={handleSelection}
       />
 
-      {!!address && (
+      {!!input && !isResolving && (
         <Pressable onPress={handleSelection}>
           <Ionicons
             name="checkmark-circle-outline"
-            style={styles.confirmIcon}
+            style={[
+              styles.confirmIcon,
+              !resolvedAddress && styles.confirmIconDisabled
+            ]}
           />
         </Pressable>
+      )}
+
+      {isResolving && (
+        <Ionicons
+          name="reload-outline"
+          style={[styles.confirmIcon, styles.loadingIcon]}
+        />
       )}
     </View>
   );
@@ -71,5 +142,11 @@ const styles = StyleSheet.create({
   confirmIcon: {
     color: COLORS.primary,
     fontSize: FONT_SIZE.xl * 1.2
+  },
+  confirmIconDisabled: {
+    opacity: 0.5
+  },
+  loadingIcon: {
+    opacity: 0.7
   }
 });

@@ -17,7 +17,7 @@ export type NetworkConfig = {
 
 // This is our default Alchemy API key.
 // You can get your own at https://dashboard.alchemyapi.io
-const ALCHEMY_KEY = 'K18rs5rCTi1A-RDyPUw92tvL7I2cGVUB';
+export const ALCHEMY_KEY = 'K18rs5rCTi1A-RDyPUw92tvL7I2cGVUB';
 
 const config: Config = {
   // The networks on which your DApp is live
