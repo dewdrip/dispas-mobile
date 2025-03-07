@@ -128,10 +128,19 @@ export default function TransferModal({
         <Text variant="titleMedium" style={styles.amountLabel}>
           AMOUNT
         </Text>
-        <Text variant="headlineLarge" style={styles.amount}>
-          {Number(formatEther(params.value)).toLocaleString('en-US')}{' '}
-          {network.currencySymbol}
-        </Text>
+        <View style={styles.amountContainer}>
+          <Text
+            variant="headlineMedium"
+            style={styles.amount}
+            numberOfLines={1}
+          >
+            {formatEther(params.value)}
+          </Text>
+
+          <Text variant="headlineMedium" style={{ ...globalStyles.text }}>
+            {network.currencySymbol}
+          </Text>
+        </View>
 
         <View style={styles.detailsContainer}>
           <View style={styles.detailsRow}>
@@ -235,9 +244,19 @@ const styles = StyleSheet.create({
     marginBottom: -16,
     ...globalStyles.textMedium
   },
+  amountContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginBottom: 16,
+    gap: 4
+  },
   amount: {
     textAlign: 'center',
-    ...globalStyles.textSemiBold
+    ...globalStyles.text,
+    maxWidth: '90%',
+    flexShrink: 1,
+    flexGrow: 0
   },
   detailsContainer: {
     borderWidth: 1,

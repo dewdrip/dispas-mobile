@@ -37,46 +37,50 @@ export function useTransfer() {
         if (isLoading) return;
         setIsLoading(true);
         const sendTransaction = async () => {
-          // get connected account wallet data from secure storage
-          const accounts = (await getItem('accounts')) as AccountType[];
-          const activeAccount = Array.from(accounts).find(
-            account =>
-              account.address.toLowerCase() ===
-              connectedAccount.address.toLowerCase()
-          );
+          try {
+            // get connected account wallet data from secure storage
+            const accounts = (await getItem('accounts')) as AccountType[];
+            const activeAccount = Array.from(accounts).find(
+              account =>
+                account.address.toLowerCase() ===
+                connectedAccount.address.toLowerCase()
+            );
 
-          const provider = new JsonRpcProvider(network.provider);
-          const wallet = new Wallet(activeAccount!.privateKey, provider);
+            const provider = new JsonRpcProvider(network.provider);
+            const wallet = new Wallet(activeAccount!.privateKey, provider);
 
-          const tx = await wallet.sendTransaction({
-            from: connectedAccount.address,
-            to,
-            value
-          });
+            const tx = await wallet.sendTransaction({
+              from: connectedAccount.address,
+              to,
+              value
+            });
 
-          const txReceipt = await tx.wait(1);
+            const txReceipt = await tx.wait(1);
 
-          dispatch(addRecipient(to));
+            dispatch(addRecipient(to));
 
-          // Add transaction to Redux store
-          const gasFee = txReceipt?.gasUsed
-            ? txReceipt.gasUsed * txReceipt.gasPrice
-            : 0n;
+            // Add transaction to Redux store
+            const gasFee = txReceipt?.gasUsed
+              ? txReceipt.gasUsed * txReceipt.gasPrice
+              : 0n;
 
-          addTx({
-            type: 'transfer',
-            title: `${network.currencySymbol} Transfer`,
-            hash: tx.hash,
-            value: parseFloat(formatEther(tx.value), 8).toString(),
-            timestamp: Date.now(),
-            from: tx.from as Address,
-            to: tx.to as Address,
-            nonce: tx.nonce,
-            gasFee: parseFloat(formatEther(gasFee), 8).toString(),
-            total: parseFloat(formatEther(tx.value + gasFee), 8).toString()
-          });
+            addTx({
+              type: 'transfer',
+              title: `${network.currencySymbol} Transfer`,
+              hash: tx.hash,
+              value: parseFloat(formatEther(tx.value), 8).toString(),
+              timestamp: Date.now(),
+              from: tx.from as Address,
+              to: tx.to as Address,
+              nonce: tx.nonce,
+              gasFee: parseFloat(formatEther(gasFee), 8).toString(),
+              total: parseFloat(formatEther(tx.value + gasFee), 8).toString()
+            });
 
-          resolve(txReceipt);
+            resolve(txReceipt);
+          } catch (error) {
+            reject(`Failed to transfer tokens: ${error}`);
+          }
         };
 
         openModal('TransferModal', {

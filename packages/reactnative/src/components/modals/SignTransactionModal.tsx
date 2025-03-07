@@ -172,12 +172,33 @@ export default function SignTransactionModal({
         contract
       </Text>
 
-      <Text
-        variant="headlineMedium"
-        style={{ textAlign: 'center', marginBottom: 16, ...globalStyles.text }}
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          alignSelf: 'center',
+          marginBottom: 16,
+          gap: 4
+        }}
       >
-        {ethers.formatEther(params.value)} {network.currencySymbol}
-      </Text>
+        <Text
+          variant="headlineMedium"
+          style={{
+            textAlign: 'center',
+            ...globalStyles.text,
+            maxWidth: '90%',
+            flexShrink: 1,
+            flexGrow: 0
+          }}
+          numberOfLines={1}
+        >
+          {ethers.formatEther(params.value)}
+        </Text>
+
+        <Text variant="headlineMedium" style={{ ...globalStyles.text }}>
+          {network.currencySymbol}
+        </Text>
+      </View>
 
       <View
         style={{
