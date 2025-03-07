@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Image,
   Pressable,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   TextInput,
@@ -45,7 +46,9 @@ export default function Home() {
 
   const account = useAccount();
   const network = useNetwork();
-  const { balance } = useBalance({ address: account.address });
+  const { balance, refetch: fetchBalance } = useBalance({
+    address: account.address
+  });
   const {
     price: nativeCurrencyPrice,
     loading: isFetchingNativeCurrency,
@@ -312,8 +315,34 @@ export default function Home() {
     }
   }, [nativeCurrencyPrice]);
 
+  const [isRefetchingResources, setIsRefetchingResources] = useState(false);
+
+  const refetchResources = async () => {
+    if (!isRefetchingResources) {
+      setIsRefetchingResources(true);
+    }
+    try {
+      await fetchNativeCurrency();
+      await fetchBalance();
+    } catch (error) {
+      return;
+    } finally {
+      setIsRefetchingResources(false);
+    }
+  };
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetchingResources}
+          onRefresh={refetchResources}
+          colors={[COLORS.primary]}
+          tintColor={COLORS.primary}
+        />
+      }
+    >
       <Header />
 
       <Card style={styles.transferContainer}>
@@ -488,7 +517,7 @@ const styles = StyleSheet.create({
   actionButtonContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 10,
+    gap: 15,
     marginTop: 10
   },
   actionButton: {
