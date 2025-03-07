@@ -31,7 +31,7 @@ export function useTransfer() {
   const promptTransfer = ({
     to,
     value
-  }: SendTxConfig): Promise<TransactionReceipt | null | undefined> => {
+  }: SendTxConfig): Promise<TransactionReceipt | null> => {
     return new Promise(async (resolve, reject) => {
       try {
         if (isLoading) return;

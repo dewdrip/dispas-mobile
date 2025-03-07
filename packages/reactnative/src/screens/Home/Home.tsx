@@ -8,6 +8,7 @@ import {
   TextInput,
   View
 } from 'react-native';
+import { useModal } from 'react-native-modalfy';
 import { Button, Card, Text } from 'react-native-paper';
 import { useToast } from 'react-native-toast-notifications';
 // @ts-ignore
@@ -54,6 +55,8 @@ export default function Home() {
     loading: isFetchingNativeCurrency,
     fetchPrice: fetchNativeCurrency
   } = useCryptoPrice({ priceID: network.coingeckoPriceId });
+
+  const { openModal } = useModal();
 
   const formattedBalance = balance ? Number(formatEther(balance)) : 0;
 
@@ -249,20 +252,31 @@ export default function Home() {
         amount: parseEther(payment.amount)
       }));
 
+      let tx;
       if (_payments.length === 1) {
-        await transfer({
+        tx = await transfer({
           to: _payments[0].recipient,
           value: _payments[0].amount
         });
       } else {
-        await write({
+        tx = await write({
           args: [_payments],
           value: sumPayments()
         });
       }
 
-      toast.show('Transfer successful! 🚀', {
-        type: 'success'
+      if (!tx) {
+        toast.show(
+          'Transfer failed. Please ensure you have a stable network and try again',
+          {
+            type: 'danger'
+          }
+        );
+        return;
+      }
+
+      openModal('TxSuccessModal', {
+        hash: tx.hash
       });
 
       setTotalNativeValue('');
@@ -270,9 +284,12 @@ export default function Home() {
       setPayments([]);
     } catch (error) {
       console.error('Failed to send: ', error);
-      toast.show('Transfer failed. Check logs to see more details!', {
-        type: 'danger'
-      });
+      toast.show(
+        'Transfer failed. Please ensure you have a stable network and try again',
+        {
+          type: 'danger'
+        }
+      );
     } finally {
       setIsSending(false);
     }
@@ -330,6 +347,7 @@ export default function Home() {
       setIsRefetchingResources(false);
     }
   };
+
   return (
     <ScrollView
       style={styles.container}

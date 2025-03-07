@@ -1,7 +1,13 @@
-import { Contract, formatEther, JsonRpcProvider, Wallet } from 'ethers';
+import {
+  Contract,
+  formatEther,
+  JsonRpcProvider,
+  TransactionReceipt,
+  Wallet
+} from 'ethers';
 import { useModal } from 'react-native-modalfy';
 import { useToast } from 'react-native-toast-notifications';
-import { Address, TransactionReceipt } from 'viem';
+import { Address } from 'viem';
 import {
   useAccount,
   useDeployedContractInfo,

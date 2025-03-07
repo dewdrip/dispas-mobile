@@ -33,6 +33,7 @@ import TransactionDetailsModal from '../components/modals/TransactionDetailsModa
 import TransferConfirmationModal from '../components/modals/TransferConfirmationModal';
 import TransferModal from '../components/modals/TransferModal';
 import TxReceiptModal from '../components/modals/TxReceiptModal';
+import TxSuccessModal from '../components/modals/TxSuccessModal';
 import { persistor, store } from '../store';
 
 const theme = {
@@ -70,7 +71,8 @@ const modalConfig = {
   PrivateKeyModal,
   SeedPhraseModal,
   TransactionDetailsModal,
-  TransferModal
+  TransferModal,
+  TxSuccessModal
 };
 const defaultOptions: ModalOptions = {
   backdropOpacity: 0.6,
