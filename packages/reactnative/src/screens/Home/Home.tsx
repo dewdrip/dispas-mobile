@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Image,
   Pressable,
@@ -302,6 +302,15 @@ export default function Home() {
   const [showFullBalance, setShowFullBalance] = useState(false);
 
   const { switchNetwork } = useNetworkSwitch();
+
+  useEffect(() => {
+    if (totalNativeValue !== '') {
+      if (!nativeCurrencyPrice) return;
+      setTotalDollarValue(
+        (parseFloat(totalNativeValue) * nativeCurrencyPrice).toFixed(2)
+      );
+    }
+  }, [nativeCurrencyPrice]);
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>

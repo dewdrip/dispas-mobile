@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useNetwork } from './useNetwork';
 
 const COINGECKO_PRICE_API_ROUTE =
   'https://api.coingecko.com/api/v3/simple/price';
@@ -22,6 +21,14 @@ type UseCryptoPriceParams = {
   decimalPlaces?: number;
   enabled?: boolean;
 };
+
+/**
+ *
+ * @param config
+ * @param config.enabled defaults to `true` to read price onMount
+ *                       it refreshes when priceID, decimalPlaces
+ * @returns
+ */
 
 export const useCryptoPrice = ({
   priceID = 'ethereum',
@@ -56,13 +63,11 @@ export const useCryptoPrice = ({
     }
   };
 
-  const network = useNetwork();
-
   useEffect(() => {
     if (!enabled) return;
 
     fetchPrice();
-  }, [priceID, decimalPlaces, network]);
+  }, [priceID, decimalPlaces]);
 
   return {
     ...state,
