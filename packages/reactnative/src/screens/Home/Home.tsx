@@ -55,9 +55,7 @@ export default function Home() {
 
   const switchCurrency = () => {
     if (!nativeCurrencyPrice) {
-      toast.show('Loading exchange rate', {
-        type: 'warning'
-      });
+      toast.show('Loading exchange rate');
 
       if (!isFetchingNativeCurrency) {
         fetchNativeCurrency();
@@ -443,7 +441,8 @@ const styles = StyleSheet.create({
   input: {
     fontSize: FONT_SIZE.xl,
     ...globalStyles.text,
-    maxWidth: '85%'
+    maxWidth: '85%',
+    textAlign: 'center'
   },
   inputCurrencySymbol: {
     marginBottom: 7,
