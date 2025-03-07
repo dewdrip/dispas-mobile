@@ -163,26 +163,14 @@ export default function SignTransactionModal({
         </View>
       </View>
 
-      <View style={styles.functionName}>
-        <Text
-          style={{
-            fontSize: FONT_SIZE['md'],
-            color: 'blue',
-            ...globalStyles.textMedium
-          }}
-        >
+      <Text style={styles.contractInfo}>
+        You're calling{' '}
+        <Text style={styles.contractFunction}>`{params.functionName}`</Text> in{' '}
+        <Text style={styles.contractAddress}>
           {truncateAddress(params.contractAddress)}
-        </Text>
-        <Text
-          style={{
-            fontSize: FONT_SIZE['md'],
-            ...globalStyles.textMedium
-          }}
-        >
-          {' '}
-          : {params.functionName.toUpperCase()}
-        </Text>
-      </View>
+        </Text>{' '}
+        contract
+      </Text>
 
       <Text
         variant="headlineMedium"
@@ -328,6 +316,20 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZE['lg'],
     ...globalStyles.text,
     marginLeft: 12
+  },
+  contractInfo: {
+    ...globalStyles.text,
+    fontSize: FONT_SIZE.lg,
+    color: '#444',
+    marginBottom: 10
+  },
+  contractFunction: {
+    ...globalStyles.textSemiBold,
+    color: 'orange'
+  },
+  contractAddress: {
+    ...globalStyles.text,
+    color: '#0f99f0'
   },
   functionName: {
     flexDirection: 'row',
