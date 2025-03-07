@@ -18,6 +18,7 @@ type Props = {
       to: Address;
       value: bigint;
       onTransfer: () => Promise<TransactionReceipt | undefined>;
+      onReject: () => void;
     };
   };
 };
@@ -31,6 +32,20 @@ export default function TransferModal({
   const { balance } = useBalance({ address: account.address });
 
   const [gasCost, setGasCost] = useState<bigint | null>(null);
+
+  const estimateGasCost = async () => {
+    try {
+      const provider = new JsonRpcProvider(network.provider);
+      const feeData = await provider.getFeeData();
+
+      const gasCost = feeData.gasPrice! * BigInt(21000);
+
+      setGasCost(gasCost);
+    } catch (error) {
+      console.error('Error estimating gas cost: ', error);
+      return;
+    }
+  };
 
   const formatBalance = () => {
     return balance && Number(formatEther(balance))
@@ -47,18 +62,9 @@ export default function TransferModal({
     closeModal();
   };
 
-  const estimateGasCost = async () => {
-    try {
-      const provider = new JsonRpcProvider(network.provider);
-      const feeData = await provider.getFeeData();
-
-      const gasCost = feeData.gasPrice! * BigInt(21000);
-
-      setGasCost(gasCost);
-    } catch (error) {
-      console.error('Error estimating gas cost: ', error);
-      return;
-    }
+  const cancel = () => {
+    params.onReject();
+    closeModal();
   };
 
   useEffect(() => {
@@ -163,7 +169,7 @@ export default function TransferModal({
         <View style={styles.buttonContainer}>
           <Button
             mode="contained"
-            onPress={() => closeModal()}
+            onPress={cancel}
             buttonColor="#FFCDD2"
             style={{ flex: 1, paddingVertical: 4, borderRadius: 30 }}
             labelStyle={{ fontSize: FONT_SIZE['lg'], ...globalStyles.text }}

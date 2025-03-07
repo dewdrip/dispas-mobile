@@ -83,7 +83,8 @@ export function useTransfer() {
           from: connectedAccount,
           to,
           value,
-          onTransfer: sendTransaction
+          onTransfer: sendTransaction,
+          onReject: () => reject('Transaction Rejected')
         });
       } catch (error) {
         reject(error);
