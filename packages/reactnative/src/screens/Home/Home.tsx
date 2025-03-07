@@ -298,17 +298,22 @@ export default function Home() {
     }
   }, [network]);
 
+  const [showFullBalance, setShowFullBalance] = useState(false);
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <Header />
 
       <Card style={styles.transferContainer}>
-        <Text style={styles.balance}>
-          Balance:{' '}
-          {balance !== null
-            ? `${Number(parseBalance(balance)).toLocaleString('en-US')} ${network.currencySymbol}`
-            : null}
-        </Text>
+        <Pressable onPress={() => setShowFullBalance(prev => !prev)}>
+          <Text style={styles.balance}>
+            {balance !== null
+              ? showFullBalance
+                ? `${Number(formatEther(balance))} ${network.currencySymbol}`
+                : `${Number(parseBalance(balance)).toLocaleString('en-US')} ${network.currencySymbol}`
+              : null}
+          </Text>
+        </Pressable>
         <View style={styles.senderContainer}>
           <Blockie address={account.address} size={3 * FONT_SIZE.xl} />
 
@@ -413,7 +418,7 @@ const styles = StyleSheet.create({
   },
   balance: {
     ...globalStyles.text,
-    fontSize: FONT_SIZE.sm,
+    fontSize: FONT_SIZE.xl,
     textAlign: 'right',
     padding: 10
   },
