@@ -1,7 +1,8 @@
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Linking, StyleSheet, View } from 'react-native';
 import { Button, Divider, Text } from 'react-native-paper';
+import { useToast } from 'react-native-toast-notifications';
 import { useAccount, useBalance, useNetwork } from '../../hooks/scaffold-eth';
 import globalStyles from '../../styles/globalStyles';
 import { COLORS } from '../../utils/constants';
@@ -122,6 +123,22 @@ export default function SignTransactionModal({
     return parseFloat(ethers.formatEther(value), 8);
   }
 
+  const toast = useToast();
+
+  const showContractInExplorer = async () => {
+    if (!network.blockExplorer) return;
+
+    try {
+      await Linking.openURL(
+        `${network.blockExplorer}/address/${params.contractAddress}`
+      );
+    } catch (error) {
+      toast.show('Cannot open url', {
+        type: 'danger'
+      });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: 16 }}>
@@ -166,7 +183,7 @@ export default function SignTransactionModal({
       <Text style={styles.contractInfo}>
         You're calling{' '}
         <Text style={styles.contractFunction}>`{params.functionName}`</Text> in{' '}
-        <Text style={styles.contractAddress}>
+        <Text style={styles.contractAddress} onPress={showContractInExplorer}>
           {truncateAddress(params.contractAddress)}
         </Text>{' '}
         contract
