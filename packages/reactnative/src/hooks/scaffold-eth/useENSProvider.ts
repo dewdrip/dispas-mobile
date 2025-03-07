@@ -12,5 +12,11 @@ export function useENSProvider() {
     return address as Address | null;
   };
 
-  return { ensProvider: provider, resolve };
+  const lookupAddress = async (address: Address): Promise<string | null> => {
+    const ens = await provider.lookupAddress(address);
+
+    return ens as string | null;
+  };
+
+  return { ensProvider: provider, resolve, lookupAddress };
 }
