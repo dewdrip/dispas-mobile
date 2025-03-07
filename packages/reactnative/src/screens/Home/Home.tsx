@@ -317,7 +317,7 @@ export default function Home() {
               <Text style={styles.inputCurrencySymbol}>$</Text>
             )}
             <TextInput
-              placeholder={`0`}
+              placeholder={`How much?`}
               keyboardType="number-pad"
               style={styles.input}
               placeholderTextColor="#aaa"
