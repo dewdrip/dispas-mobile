@@ -201,7 +201,7 @@ export default function Home() {
       );
     }
 
-    toast.show('Funds shared equally');
+    toast.show("You've distributed the funds evenly");
 
     if (total !== newTotal) {
       toast.show('Total amount has been adjusted for precision', {
