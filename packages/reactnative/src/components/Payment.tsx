@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     gap: 4
   },
   address: {
-    fontSize: FONT_SIZE.sm,
+    fontSize: FONT_SIZE.md,
     ...globalStyles.text
   },
   amount: {

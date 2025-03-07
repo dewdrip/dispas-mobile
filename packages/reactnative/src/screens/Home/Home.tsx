@@ -26,7 +26,7 @@ import {
 } from '../../hooks/scaffold-eth';
 import globalStyles from '../../styles/globalStyles';
 import { COLORS } from '../../utils/constants';
-import { parseBalance } from '../../utils/scaffold-eth';
+import { parseBalance, truncateAddress } from '../../utils/scaffold-eth';
 import { FONT_SIZE } from '../../utils/styles';
 import Header from './modules/Header';
 
@@ -315,6 +315,10 @@ export default function Home() {
         <View style={styles.senderContainer}>
           <Blockie address={account.address} size={3 * FONT_SIZE.xl} />
 
+          <Text style={styles.senderAddress}>
+            {truncateAddress(account.address)}
+          </Text>
+
           <View style={styles.inputContainer}>
             {isDollar && !!totalNativeValue && (
               <Text style={styles.inputCurrencySymbol}>$</Text>
@@ -433,6 +437,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: 10,
     paddingBottom: 20
+  },
+  senderAddress: {
+    fontSize: FONT_SIZE.lg,
+    ...globalStyles.text,
+    marginTop: 5
   },
   inputContainer: {
     flexDirection: 'row',
