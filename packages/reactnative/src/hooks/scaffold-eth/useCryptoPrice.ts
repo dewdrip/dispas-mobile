@@ -43,6 +43,9 @@ export const useCryptoPrice = ({
 
   const fetchPrice = async () => {
     try {
+      if (!state.loading) {
+        setState(current => ({ ...current, loading: true }));
+      }
       const response = await axios.get<PriceData>(COINGECKO_PRICE_API_ROUTE, {
         params: {
           ids: priceID,
