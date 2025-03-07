@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-paper';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
+import Logo from '../../../components/Logo';
 import globalStyles from '../../../styles/globalStyles';
 import { FONT_SIZE } from '../../../utils/styles';
 
@@ -13,8 +13,7 @@ export default function Header({}: Props) {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Dispas</Text>
-
+      <Logo size={FONT_SIZE.xl * 2.5} />
       <View style={styles.icons}>
         <Pressable onPress={() => navigation.navigate('Wallet')}>
           <Ionicons
