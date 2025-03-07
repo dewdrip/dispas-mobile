@@ -23,7 +23,7 @@ export default function RecipientInput({ onSelect }: Props) {
 
   const [debouncedInput] = useDebounceValue(input, 500);
 
-  const ensProvider = useENSProvider();
+  const { resolve } = useENSProvider();
 
   const resolveENS = useCallback(async (value: string) => {
     if (!value) {
@@ -39,11 +39,14 @@ export default function RecipientInput({ onSelect }: Props) {
     if (value.endsWith('.eth')) {
       try {
         setIsResolving(true);
-        const resolved = await ensProvider.getResolver(value);
+        const resolved = await resolve(value);
         if (resolved) {
-          setResolvedAddress(resolved.address);
+          setResolvedAddress(resolved);
         } else {
           setResolvedAddress('');
+          toast.show(
+            `Could not resolve ${value}. Please ensure your input is accurate with a stable network`
+          );
         }
       } catch (error) {
         console.error('ENS resolution error:', error);
@@ -114,10 +117,12 @@ export default function RecipientInput({ onSelect }: Props) {
       )}
 
       {isResolving && (
-        <Ionicons
-          name="reload-outline"
-          style={[styles.confirmIcon, styles.loadingIcon]}
-        />
+        <Pressable onPress={() => resolveENS(input)}>
+          <Ionicons
+            name="reload-outline"
+            style={[styles.confirmIcon, styles.loadingIcon]}
+          />
+        </Pressable>
       )}
     </View>
   );
