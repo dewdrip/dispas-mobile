@@ -373,7 +373,7 @@ export default function Home() {
             {balance !== null
               ? showFullBalance
                 ? `${Number(formatEther(balance))} ${network.currencySymbol}`
-                : `${Number(parseBalance(balance)).toLocaleString('en-US')} ${network.currencySymbol}`
+                : `${Number(parseBalance(balance))} ${network.currencySymbol}`
               : null}
           </Text>
         </Pressable>
