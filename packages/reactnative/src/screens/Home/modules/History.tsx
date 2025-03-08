@@ -1,10 +1,12 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useModal } from 'react-native-modalfy';
 import { Text } from 'react-native-paper';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Address } from 'viem';
+import { ConsentModalParams } from '../../../components/modals/ConsentModal';
 import { Blockie } from '../../../components/scaffold-eth';
 import { clearRecipients } from '../../../store/reducers/Recipients';
 import globalStyles from '../../../styles/globalStyles';
@@ -21,8 +23,23 @@ export default function History({ onSelect }: Props) {
 
   const dispatch = useDispatch();
 
+  const { openModal } = useModal();
+
   const clearHistory = () => {
     dispatch(clearRecipients());
+  };
+
+  const approveHistoryClearance = () => {
+    const params: ConsentModalParams = {
+      title: 'Clear History?',
+      subTitle:
+        'This will erase all records of your past recipients on Dispas.',
+      iconColor: COLORS.error,
+      titleStyle: { color: COLORS.error },
+      subTitleStyle: { color: COLORS.error },
+      onAccept: clearHistory
+    };
+    openModal('ConsentModal', params);
   };
   return (
     <View style={styles.container}>
@@ -30,7 +47,7 @@ export default function History({ onSelect }: Props) {
         <Text style={styles.title}>History</Text>
 
         <View style={styles.icons}>
-          <Pressable onPress={clearHistory}>
+          <Pressable onPress={approveHistoryClearance}>
             <Ionicons
               name="trash-outline"
               color={COLORS.error}
