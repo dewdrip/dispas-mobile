@@ -3,13 +3,14 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-paper';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Address } from 'viem';
 import { Blockie } from '../../../components/scaffold-eth';
+import { clearRecipients } from '../../../store/reducers/Recipients';
 import globalStyles from '../../../styles/globalStyles';
 import { COLORS } from '../../../utils/constants';
 import { truncateAddress } from '../../../utils/scaffold-eth';
-import { FONT_SIZE } from '../../../utils/styles';
+import { FONT_SIZE, WINDOW_HEIGHT } from '../../../utils/styles';
 
 type Props = {
   onSelect?: (address: Address) => void;
@@ -17,25 +18,23 @@ type Props = {
 
 export default function History({ onSelect }: Props) {
   const recipients: string[] = useSelector((state: any) => state.recipients);
+
+  const dispatch = useDispatch();
+
+  const clearHistory = () => {
+    dispatch(clearRecipients());
+  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>History</Text>
 
         <View style={styles.icons}>
-          <Pressable style={styles.addButton}>
+          <Pressable onPress={clearHistory}>
             <Ionicons
-              name="add-outline"
-              color={COLORS.primary}
+              name="trash-outline"
+              color={COLORS.error}
               size={FONT_SIZE.xl * 1.2}
-            />
-          </Pressable>
-
-          <Pressable>
-            <Ionicons
-              name="settings-outline"
-              color={'grey'}
-              size={FONT_SIZE.xl * 1.5}
             />
           </Pressable>
         </View>
@@ -46,6 +45,7 @@ export default function History({ onSelect }: Props) {
       ) : (
         recipients.map(recipient => (
           <Pressable
+            key={recipient}
             onPress={() => (onSelect ? onSelect(recipient as Address) : null)}
             style={styles.addressContainer}
           >
@@ -62,7 +62,8 @@ export default function History({ onSelect }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50
+    paddingTop: 50,
+    maxHeight: WINDOW_HEIGHT * 0.5
   },
   header: {
     flexDirection: 'row',
@@ -78,14 +79,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 20
-  },
-  addButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderRadius: 15,
-    borderColor: COLORS.primary,
-    padding: 1
   },
   addressContainer: {
     flexDirection: 'row',

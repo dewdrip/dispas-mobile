@@ -14,6 +14,16 @@ export const recipientSlice = createSlice({
         return state;
       }
     },
+    addRecipients: (state, action) => {
+      const newRecipients = action.payload.map((recipient: string) =>
+        recipient.toLowerCase()
+      );
+      const uniqueNewRecipients = newRecipients.filter(
+        (recipient: string) =>
+          !state.map(r => r.toLowerCase()).includes(recipient)
+      );
+      return [...state, ...uniqueNewRecipients];
+    },
     removeRecipient: (state, action) => {
       const removedRecipient = action.payload.toLowerCase();
       return state.filter(
@@ -24,7 +34,7 @@ export const recipientSlice = createSlice({
   }
 });
 
-export const { addRecipient, removeRecipient, clearRecipients } =
+export const { addRecipient, addRecipients, removeRecipient, clearRecipients } =
   recipientSlice.actions;
 
 export default recipientSlice.reducer;

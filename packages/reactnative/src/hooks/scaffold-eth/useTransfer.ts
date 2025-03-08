@@ -28,7 +28,7 @@ export function useTransfer() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const promptTransfer = ({
+  const signTransfer = ({
     to,
     value
   }: SendTxConfig): Promise<TransactionReceipt | null> => {
@@ -100,6 +100,6 @@ export function useTransfer() {
 
   return {
     isLoading,
-    transfer: promptTransfer
+    transfer: signTransfer
   };
 }

@@ -23,12 +23,12 @@ const config: Config = {
   // The networks on which your DApp is live
   networks: {
     localhost: {
-      name: 'Localhost',
+      name: 'Lukso Local',
       provider: 'http://192.168.0.124:8545',
       id: 1337,
-      currencySymbol: 'ETH',
-      coingeckoPriceId: 'ethereum',
-      blockExplorer: null
+      currencySymbol: 'LYX',
+      coingeckoPriceId: 'lukso-token-2',
+      blockExplorer: 'https://explorer.execution.mainnet.lukso.network'
     },
     arbitrum: {
       name: 'Arbitrum',

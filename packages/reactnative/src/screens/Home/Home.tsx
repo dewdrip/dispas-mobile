@@ -15,6 +15,7 @@ import { useToast } from 'react-native-toast-notifications';
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome';
 // @ts-ignore
 import FontAwesome6 from 'react-native-vector-icons/dist/FontAwesome6';
+import { useDispatch } from 'react-redux';
 import { formatEther, parseEther } from 'viem';
 import Payment from '../../components/Payment';
 import ProfilePlaceholder from '../../components/ProfilePlaceholder';
@@ -29,6 +30,7 @@ import {
   useScaffoldContractWrite,
   useTransfer
 } from '../../hooks/scaffold-eth';
+import { addRecipients } from '../../store/reducers/Recipients';
 import globalStyles from '../../styles/globalStyles';
 import { COLORS } from '../../utils/constants';
 import { parseBalance, truncateAddress } from '../../utils/scaffold-eth';
@@ -58,6 +60,8 @@ export default function Home() {
   } = useCryptoPrice({ priceID: network.coingeckoPriceId });
 
   const { openModal } = useModal();
+
+  const dispatch = useDispatch();
 
   const formattedBalance = balance ? Number(formatEther(balance)) : 0;
 
@@ -262,6 +266,10 @@ export default function Home() {
           args: [_payments],
           value: sumPayments()
         });
+
+        if (tx) {
+          dispatch(addRecipients(_payments.map(payment => payment.recipient)));
+        }
       }
 
       if (!tx) {
