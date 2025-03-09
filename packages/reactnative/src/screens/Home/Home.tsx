@@ -501,7 +501,7 @@ const styles = StyleSheet.create({
   transferContainer: {
     width: '90%',
     borderWidth: 1,
-    borderColor: COLORS.gray,
+    borderColor: 'white',
     borderRadius: 24,
     backgroundColor: 'white',
     gap: 24,
