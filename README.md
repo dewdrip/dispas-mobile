@@ -1,6 +1,6 @@
 # 🧠 Think → 👨‍💻 Build → 🚀 Deploy
 
-✍️ **Scaffold-ETH-Mobile** is an open-source toolkit for building decentralized applications (dApps) on Ethereum and other EVM-compatible blockchains. It simplifies mobile dApp development with fast, secure and customizable pre-built components to create, deploy and interact with smart contracts.
+✍️ **[ETH Mobile](https://ethmobile.io)** is an open-source toolkit for building decentralized applications (dApps) on Ethereum and other EVM-compatible blockchains. It simplifies mobile dApp development with fast, secure and customizable pre-built components to create, deploy and interact with smart contracts.
 
 [Watch me mint a Snowman NFT!☃️](https://youtu.be/CaJTnRtLOK8)
 
@@ -36,9 +36,9 @@ To get started, follow the steps below:
 1. Clone this repo & install dependencies
 
 ```
-git clone https://github.com/ValentineCodes/scaffold-eth-mobile.git
+git clone https://github.com/dewdrip/eth-mobile.git
 
-cd scaffold-eth-mobile
+cd eth-mobile
 
 yarn install
 
@@ -109,8 +109,8 @@ Run smart contract test with `yarn hardhat:test`
 - Edit your frontend in `packages/reactnative/src/screens`
 - Edit your deployment scripts in `packages/hardhat/deploy`
 
-## Contributing to Scaffold-ETH-Mobile
+## Contributing to ETH Mobile
 
-We welcome contributions to Scaffold-ETH-Mobile!
+We welcome contributions to ETH Mobile!
 
-Please see [CONTRIBUTING.MD](https://github.com/ValentineCodes/scaffold-eth-mobile/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH.
+Please see [CONTRIBUTING.MD](https://github.com/dewdrip/eth-mobile/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to ETH Mobile.
