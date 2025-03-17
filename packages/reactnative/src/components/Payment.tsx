@@ -25,6 +25,8 @@ type Props = {
   onClose: (recipient: `0x${string}`) => void;
   onChange: (recipient: `0x${string}`, amount: string) => void;
   fetchNativeCurrency: () => void;
+  change?: string;
+  onGiftChange?: (recipient: `0x${string}`) => void;
 };
 
 export default function Payment({
@@ -33,7 +35,9 @@ export default function Payment({
   isFetchingNativeCurrency,
   onClose,
   onChange,
-  fetchNativeCurrency
+  fetchNativeCurrency,
+  change,
+  onGiftChange
 }: Props) {
   const network = useNetwork();
   const toast = useToast();
@@ -192,9 +196,17 @@ export default function Payment({
         </Pressable>
       )}
 
-      <Pressable onPress={() => onClose(payment.recipient)}>
-        <Ionicons name="close-circle-outline" style={styles.closeIcon} />
-      </Pressable>
+      <View style={styles.footer}>
+        <Pressable onPress={() => onClose(payment.recipient)}>
+          <Ionicons name="close-circle-outline" style={styles.closeIcon} />
+        </Pressable>
+
+        {change && Number(change) > 0 && onGiftChange && (
+          <Pressable onPress={() => onGiftChange(payment.recipient)}>
+            <Ionicons name="gift-outline" style={styles.giftIcon} />
+          </Pressable>
+        )}
+      </View>
     </View>
   );
 }
@@ -253,8 +265,13 @@ const styles = StyleSheet.create({
     maxWidth: 100,
     textAlign: 'center'
   },
+  footer: { flexDirection: 'row', alignItems: 'center', gap: 10 },
   closeIcon: {
     fontSize: FONT_SIZE.lg,
     color: COLORS.error
+  },
+  giftIcon: {
+    fontSize: FONT_SIZE.lg,
+    color: COLORS.primary
   }
 });

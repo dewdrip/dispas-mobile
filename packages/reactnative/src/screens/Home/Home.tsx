@@ -43,6 +43,7 @@ export default function Home() {
 
   const [totalNativeValue, setTotalNativeValue] = useState('');
   const [totalDollarValue, setTotalDollarValue] = useState('');
+  const [change, setChange] = useState('');
   const [isDollar, setIsDollar] = useState(false); // Toggle USD/LYX
   const [isSending, setIsSending] = useState(false);
 
@@ -172,21 +173,19 @@ export default function Home() {
   const sumPayments = (): bigint =>
     payments.reduce((sum, p) => sum + (parseEther(p.amount) || -1n), 0n);
 
-  const isSharedEqually = (): boolean =>
+  const isSplit = (): boolean =>
     totalNativeValue === '' ||
     payments.length === 0 ||
     parseEther(totalNativeValue) === sumPayments();
 
-  const shareEqually = () => {
-    if (
-      payments.length === 0 ||
-      Number(totalNativeValue) === 0 ||
-      isSharedEqually()
-    )
+  const split = () => {
+    if (payments.length === 0 || Number(totalNativeValue) === 0 || isSplit())
       return;
 
     const total = parseEther(totalNativeValue);
     const share = total / BigInt(payments.length);
+    const newTotal = share * BigInt(payments.length);
+    const changeAmount = total - newTotal;
 
     setPayments(prevPayments =>
       prevPayments.map(payment => ({
@@ -195,9 +194,8 @@ export default function Home() {
       }))
     );
 
-    const newTotal = share * BigInt(payments.length);
-
     setTotalNativeValue(formatEther(newTotal));
+    setChange(formatEther(changeAmount));
 
     if (nativeCurrencyPrice) {
       setTotalDollarValue(
@@ -205,13 +203,21 @@ export default function Home() {
       );
     }
 
-    toast.show("You've distributed the funds evenly");
-
-    if (total !== newTotal) {
-      toast.show('Total amount has been adjusted for precision', {
+    if (changeAmount > 0n) {
+      toast.show("You've got some change", {
         type: 'warning'
       });
     }
+  };
+
+  const giftChange = (_recipient: `0x${string}`) => {
+    if (!change || Number(change) === 0) return;
+
+    const recipient = payments.find(p => p.recipient === _recipient);
+
+    const newAmount = parseEther(recipient?.amount || '0') + parseEther(change);
+    addRecipientAmount(_recipient, formatEther(newAmount));
+    setChange('');
   };
 
   const { transfer } = useTransfer();
@@ -240,7 +246,7 @@ export default function Home() {
     }
 
     // Ensure total of payments matches the inputted amount
-    if (!isSharedEqually()) {
+    if (!isSplit()) {
       toast.show('Total amount does not match sum of payments!', {
         type: 'danger'
       });
@@ -428,8 +434,8 @@ export default function Home() {
 
             <Pressable
               style={[styles.actionButton, styles.shareButton]}
-              onPress={shareEqually}
-              disabled={isSharedEqually()}
+              onPress={split}
+              disabled={isSplit()}
             >
               <FontAwesome name="share-alt" style={styles.shareIcon} />
             </Pressable>
@@ -441,6 +447,13 @@ export default function Home() {
               <FontAwesome6 name="shuffle" style={styles.switchIcon} />
             </Pressable>
           </View>
+
+          {change && Number(change) > 0 && (
+            <Text style={styles.change}>
+              {parseEther(change).toString()} WEI
+              <Text style={styles.subText}>(change)</Text>
+            </Text>
+          )}
         </View>
 
         <View style={styles.receiverContainer}>
@@ -461,6 +474,8 @@ export default function Home() {
                   onClose={removePayment}
                   onChange={addRecipientAmount}
                   fetchNativeCurrency={fetchNativeCurrency}
+                  change={change}
+                  onGiftChange={giftChange}
                 />
               ))
             )}
@@ -569,6 +584,19 @@ const styles = StyleSheet.create({
   },
   switchIcon: {
     fontSize: FONT_SIZE.lg
+  },
+  change: {
+    fontSize: FONT_SIZE.lg,
+    ...globalStyles.text,
+    marginTop: 10,
+    paddingHorizontal: 10,
+    paddingTop: 2,
+    backgroundColor: 'orange',
+    borderRadius: 20,
+    color: 'white'
+  },
+  subText: {
+    fontSize: FONT_SIZE.sm
   },
   receiverContainer: {
     backgroundColor: COLORS.lightGray,
