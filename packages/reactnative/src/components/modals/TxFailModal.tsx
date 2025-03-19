@@ -20,8 +20,8 @@ export default function TxFailModal({
   }
 }: Props) {
   const handleRetry = () => {
-    onRetry();
     closeModal();
+    onRetry();
   };
   return (
     <View style={styles.container}>

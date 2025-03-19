@@ -280,13 +280,9 @@ export default function Home() {
       }
 
       if (!tx) {
-        toast.show(
-          'Transfer failed. Please ensure you have a stable network and try again',
-          {
-            type: 'danger'
-          }
+        throw new Error(
+          'Transfer failed. Please ensure you have a stable network and try again'
         );
-        return;
       }
 
       openModal('TxSuccessModal', {
