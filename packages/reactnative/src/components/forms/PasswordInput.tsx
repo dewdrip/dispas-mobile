@@ -48,6 +48,7 @@ export default function PasswordInput({
           left={<TextInput.Icon icon="lock" color="#a3a3a3" />}
           secureTextEntry={!show}
           placeholder="Password"
+          placeholderTextColor="#ccc"
           onChangeText={onChange}
           onSubmitEditing={onSubmit}
         />
@@ -92,7 +93,8 @@ const styles = StyleSheet.create({
   inputContainer: { flexDirection: 'row', alignItems: 'center' },
   inputContent: {
     fontSize: FONT_SIZE['lg'],
-    ...globalStyles.text
+    ...globalStyles.text,
+    color: 'black'
   },
   infoText: {
     color: '#a3a3a3',

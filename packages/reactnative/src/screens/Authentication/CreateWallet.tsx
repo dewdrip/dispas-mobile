@@ -85,7 +85,7 @@ export default function CreateWallet({}: Props) {
   };
 
   useEffect(() => {
-    generateNewWallet();
+    setTimeout(generateNewWallet, 500);
   }, []);
 
   return (

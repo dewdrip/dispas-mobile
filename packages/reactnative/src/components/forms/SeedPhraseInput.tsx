@@ -40,6 +40,7 @@ export default function SeedPhraseInput({
           secureTextEntry={!show}
           multiline={show}
           placeholder="Seed Phrase"
+          placeholderTextColor="#ccc"
           onChangeText={onChange}
           onSubmitEditing={onSubmit}
           onBlur={onBlur}
@@ -78,7 +79,8 @@ const styles = StyleSheet.create({
   inputContainer: { flexDirection: 'row', alignItems: 'center' },
   inputContent: {
     fontSize: FONT_SIZE['lg'],
-    ...globalStyles.text
+    ...globalStyles.text,
+    color: 'black'
   },
   actionIconsContainer: {
     flexDirection: 'row',
