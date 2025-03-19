@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Image,
   Pressable,
@@ -40,6 +40,7 @@ import History from './modules/History';
 
 export default function Home() {
   const toast = useToast();
+  const totalAmountInputRef = useRef<TextInput>(null);
 
   const [totalNativeValue, setTotalNativeValue] = useState('');
   const [totalDollarValue, setTotalDollarValue] = useState('');
@@ -358,6 +359,10 @@ export default function Home() {
     }
   };
 
+  const focusOnTotalAmountInput = () => {
+    totalAmountInputRef.current?.focus();
+  };
+
   return (
     <ScrollView
       style={styles.container}
@@ -390,11 +395,15 @@ export default function Home() {
             {truncateAddress(account.address)}
           </Text>
 
-          <View style={styles.inputContainer}>
+          <Pressable
+            onPress={focusOnTotalAmountInput}
+            style={styles.inputContainer}
+          >
             {isDollar && !!totalNativeValue && (
               <Text style={styles.inputCurrencySymbol}>$</Text>
             )}
             <TextInput
+              ref={totalAmountInputRef}
               placeholder={`How much?`}
               keyboardType="number-pad"
               style={styles.input}
@@ -407,7 +416,7 @@ export default function Home() {
                 {network.currencySymbol}
               </Text>
             )}
-          </View>
+          </Pressable>
 
           <Text
             style={[
@@ -534,7 +543,8 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: 20
   },
   input: {
     fontSize: FONT_SIZE.xl,
