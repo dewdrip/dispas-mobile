@@ -16,7 +16,7 @@ type Props = {
 export default function EditAccountNameForm({ close }: Props) {
   const dispatch = useDispatch();
 
-  const accounts: Account[] = useSelector(state => state.accounts);
+  const accounts: Account[] = useSelector((state: any) => state.accounts);
   const connectedAccount: Account = useAccount();
 
   const [name, setName] = useState(connectedAccount.name);
@@ -48,13 +48,14 @@ export default function EditAccountNameForm({ close }: Props) {
         <Ionicons name="close-outline" size={28} color="red" onPress={close} />
         <TextInput
           placeholder="New account name"
+          placeholderTextColor="#ccc"
           value={name}
           onChangeText={handleInputChange}
           onSubmitEditing={editName}
           mode="outlined"
           style={{ width: '60%' }}
           outlineStyle={{ borderRadius: 12, borderColor: COLORS.gray }}
-          contentStyle={globalStyles.text}
+          contentStyle={[globalStyles.text, { color: 'black' }]}
           outlineColor={COLORS.primary}
           activeOutlineColor={COLORS.primary}
           selectionColor={COLORS.primaryLight}

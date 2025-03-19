@@ -100,12 +100,13 @@ export default function SeedPhraseModal({ modal: { closeModal } }: Props) {
             mode="outlined"
             secureTextEntry
             placeholder="Password"
+            placeholderTextColor="#ccc"
             onChangeText={handleInputChange}
             onSubmitEditing={showSeedPhrase}
             style={styles.input}
             activeOutlineColor={COLORS.primary}
             outlineStyle={{ borderRadius: 12, borderColor: COLORS.gray }}
-            contentStyle={globalStyles.text}
+            contentStyle={[globalStyles.text, { color: 'black' }]}
           />
           {error && (
             <Text style={styles.errorText} variant="bodySmall">

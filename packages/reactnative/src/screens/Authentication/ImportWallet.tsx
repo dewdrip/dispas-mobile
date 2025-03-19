@@ -16,7 +16,11 @@ import BackButton from '../../components/buttons/BackButton';
 import ScanButton from '../../components/buttons/ScanButton';
 import PasswordInput from '../../components/forms/PasswordInput';
 import SeedPhraseInput from '../../components/forms/SeedPhraseInput';
-import { useSecureStorage, useWallet } from '../../hooks/scaffold-eth';
+import {
+  NewWallet,
+  useSecureStorage,
+  useWallet
+} from '../../hooks/scaffold-eth';
 import { initAccounts } from '../../store/reducers/Accounts';
 import { loginUser } from '../../store/reducers/Auth';
 import styles from '../../styles/authentication/importWallet';
@@ -88,7 +92,11 @@ function ImportWallet() {
 
     setIsImporting(true);
 
-    const wallet = importWallet(seedPhrase, 0);
+    const wallet: NewWallet = await new Promise(resolve => {
+      setTimeout(() => {
+        resolve(importWallet(seedPhrase, 0));
+      }, 200);
+    });
 
     const initWallet = {
       address: wallet.address,

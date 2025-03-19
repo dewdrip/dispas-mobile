@@ -405,9 +405,9 @@ export default function Home() {
             <TextInput
               ref={totalAmountInputRef}
               placeholder={`How much?`}
+              placeholderTextColor="#aaa"
               keyboardType="number-pad"
               style={styles.input}
-              placeholderTextColor="#aaa"
               value={displayTotalValue}
               onChangeText={handleInput}
             />

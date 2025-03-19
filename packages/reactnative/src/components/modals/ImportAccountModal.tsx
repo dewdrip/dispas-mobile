@@ -93,6 +93,7 @@ export default function ImportAccountModal({ modal: { closeModal } }: Props) {
           mode="outlined"
           secureTextEntry
           placeholder="Enter your private key here"
+          placeholderTextColor="#ccc"
           right={
             <TextInput.Icon
               icon="qrcode-scan"
@@ -102,7 +103,7 @@ export default function ImportAccountModal({ modal: { closeModal } }: Props) {
           }
           error={!!error}
           outlineStyle={{ borderRadius: 12, borderColor: COLORS.gray }}
-          contentStyle={globalStyles.text}
+          contentStyle={[globalStyles.text, { color: 'black' }]}
         />
         {error && (
           <Text variant="bodySmall" style={styles.errorText}>

@@ -120,9 +120,10 @@ export default function PrivateKeyModal({ modal: { closeModal } }: Props) {
             mode="outlined"
             secureTextEntry
             placeholder="Password"
+            placeholderTextColor="#ccc"
             error={!!error}
             outlineStyle={{ borderRadius: 12, borderColor: COLORS.gray }}
-            contentStyle={globalStyles.text}
+            contentStyle={[globalStyles.text, { color: 'black' }]}
           />
           {error && (
             <Text variant="bodySmall" style={styles.errorText}>

@@ -99,6 +99,7 @@ export default function Recipient({ recipient, onChange, onSubmit }: Props) {
         mode="outlined"
         style={styles.input}
         placeholder="Recipient Address"
+        placeholderTextColor="#ccc"
         onChangeText={handleInputChange}
         onSubmitEditing={onSubmit}
         left={
@@ -113,7 +114,7 @@ export default function Recipient({ recipient, onChange, onSubmit }: Props) {
         right={<TextInput.Icon icon="qrcode-scan" onPress={scanQRCode} />}
         error={!!error}
         outlineStyle={{ borderRadius: 12, borderColor: COLORS.gray }}
-        contentStyle={globalStyles.text}
+        contentStyle={[globalStyles.text, { color: 'black' }]}
       />
       {error && (
         <Text variant="bodySmall" style={styles.errorText}>

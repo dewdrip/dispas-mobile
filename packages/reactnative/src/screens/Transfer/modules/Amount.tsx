@@ -128,12 +128,13 @@ export default function Amount({
         mode="outlined"
         style={styles.input}
         placeholder={`0 ${isDollar ? 'USD' : token}`}
+        placeholderTextColor="#ccc"
         onChangeText={handleInputChange}
         onSubmitEditing={onConfirm}
         keyboardType="number-pad"
         error={!!error}
         outlineStyle={{ borderRadius: 12, borderColor: COLORS.gray }}
-        contentStyle={globalStyles.text}
+        contentStyle={[globalStyles.text, { color: 'black' }]}
       />
 
       {isNativeToken && (

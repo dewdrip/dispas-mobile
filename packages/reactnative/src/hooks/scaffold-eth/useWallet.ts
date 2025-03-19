@@ -9,6 +9,12 @@ export interface Wallet {
   privateKey: string;
 }
 
+export interface NewWallet {
+  mnemonic: string;
+  address: string;
+  privateKey: string;
+}
+
 /**
  * @notice hook to read and write mnemonic
  */

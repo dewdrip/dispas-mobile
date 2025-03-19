@@ -37,7 +37,7 @@ export function InputBase<
         value={value?.toString()}
         mode="outlined"
         style={styles.input}
-        contentStyle={globalStyles.text}
+        contentStyle={[globalStyles.text, { color: 'black' }]}
         outlineStyle={{ borderRadius: 24, borderWidth: 0 }}
         selectionColor={COLORS.primaryLight}
         cursorColor={COLORS.primary}
