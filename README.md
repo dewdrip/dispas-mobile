@@ -1,26 +1,10 @@
-# 🧠 Think → 👨‍💻 Build → 🚀 Deploy
+# Dispas
 
-✍️ **[ETH Mobile](https://ethmobile.io)** is an open-source toolkit for building decentralized applications (dApps) on Ethereum and other EVM-compatible blockchains. It simplifies mobile dApp development with fast, secure and customizable pre-built components to create, deploy and interact with smart contracts.
+### Disburse Funds in ONE transaction
 
-[Watch me mint a Snowman NFT!☃️](https://youtu.be/CaJTnRtLOK8)
+![Dispas](./assets/dispas.png)
 
-⚙️ **Tech Stack**: Built with React Native, Hardhat, Ethers, and TypeScript to streamline mobile dApp development.
-
-### Key Features
-
-- 🧑‍💻 **Contract Debugger**: Inspect smart contract details such as address, balance, variables, and functions. It also allows real-time interaction with contracts, making development more efficient.
-
-![Contract Debugger](./assets/debugger.png)
-
-- 💳 **In-Built Wallet**: A secure mobile crypto wallet for managing funds, signing transactions, and interacting with multiple EVM-compatible chains.
-
-![Wallet](./assets/wallet.png)
-
-- ✅ **Contract Hot Reload**: Automatically updates the mobile frontend to reflect changes made to smart contracts during development.
-- 🪝 **Custom Hooks**: A collection of React hooks with TypeScript autocompletion, simplifying contract interaction in your mobile app.
-- 🧱 **Web3 Components**: Pre-built components for quickly building mobile dApp frontends.
-
-## Requirements
+## Local Development
 
 Before you begin, you need to install the following tools:
 
@@ -36,9 +20,9 @@ To get started, follow the steps below:
 1. Clone this repo & install dependencies
 
 ```
-git clone https://github.com/dewdrip/eth-mobile.git
+git clone https://github.com/dewdrip/dispas-mobile.git
 
-cd eth-mobile
+cd dispas-mobile
 
 yarn install
 
@@ -67,7 +51,7 @@ yarn deploy
 
 This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
 
-5. Set the `ALCHEMY_KEY` and `localhost.provider`(port **8545**) variables in `packages/reactnative/scaffold.config.ts`
+5. Set the `ALCHEMY_KEY` and `localhost.provider`(port **8545**) variables in `packages/reactnative/ethmobile.config.ts`
 
 #### To determine your local IP address:
 
@@ -101,7 +85,7 @@ yarn ios
 
 8. Import one of the funded accounts in your local blockchain into your wallet to have funds for testing
 
-You can interact with your smart contract using the `DebugContracts` tab. You can configure your supported networks in `packages/reactnative/scaffold.config.ts`.
+You can interact with your smart contract using the `DebugContracts` tab. You can configure your supported networks in `packages/reactnative/ethmobile.config.ts`.
 
 Run smart contract test with `yarn hardhat:test`
 
